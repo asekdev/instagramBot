@@ -2,8 +2,6 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.sql.Driver;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -11,12 +9,13 @@ class BotAuthenticationTest {
 
     static WebDriver driver;
     static BotAuthentication botAuth;
+    static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
 
     @BeforeAll
     public static void executeBefore() {
         System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
         driver = new ChromeDriver();
-        botAuth = new BotAuthentication(driver, "grandkosmetics", "ruska2019!");
+        botAuth = new BotAuthentication(driver, userDetails);
     }
 
 //    @Test

@@ -5,28 +5,18 @@ import org.openqa.selenium.WebElement;
 
 public class BotAuthentication implements IAuth {
 
-    WebDriver driver;
-    private String username;
-    private String password;
+    private WebDriver driver;
+    private UserDetails userDetails;
 
-    public BotAuthentication(WebDriver driver, String username, String password) {
+    public BotAuthentication(WebDriver driver, UserDetails userDetails) {
         this.driver = driver;
-        this.username = username;
-        this.password = password;
-    }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
     }
 
     public boolean isLoggedIn() {
         try {
-            this.driver.findElement(By.xpath("//a[@href='/" + this.getUsername() + "/']"));
-            System.out.println("//a[@href='/" + this.getUsername() + "/']");
+            this.driver.findElement(By.xpath("//a[@href='/" + this.userDetails.getUsername() + "/']"));
+            System.out.println("//a[@href='/" + this.userDetails.getUsername() + "/']");
         } catch(NoSuchElementException e) {
             System.out.println("You are not logged in. Try login again.");
             System.out.println("returning false now");
@@ -44,13 +34,13 @@ public class BotAuthentication implements IAuth {
 
             WebElement usernameField = this.driver.findElement(By.cssSelector("input[name='username']"));
             usernameField.click();
-            usernameField.sendKeys(this.getUsername());
+            usernameField.sendKeys(this.userDetails.getUsername());
 
             Utils.wait(7);
 
             WebElement passwordField = this.driver.findElement(By.cssSelector("input[name='password']"));
             passwordField.click();
-            passwordField.sendKeys(this.getPassword());
+            passwordField.sendKeys(this.userDetails.getPassword());
 
             Utils.wait(8);
 
@@ -78,7 +68,7 @@ public class BotAuthentication implements IAuth {
 
     public boolean logout() {
        try {
-           WebElement profile = this.driver.findElement(By.xpath("//a[@href='/" + this.getUsername() + "/']"));
+           WebElement profile = this.driver.findElement(By.xpath("//a[@href='/" + this.userDetails.getUsername() + "/']"));
            profile.click();
 
            Utils.wait(4);
