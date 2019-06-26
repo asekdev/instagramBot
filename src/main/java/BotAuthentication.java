@@ -1,3 +1,4 @@
+import Interfaces.IAuth;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -10,19 +11,17 @@ public class BotAuthentication implements IAuth {
 
     public BotAuthentication(WebDriver driver, UserDetails userDetails) {
         this.driver = driver;
-
+        this.userDetails = userDetails;
     }
 
     public boolean isLoggedIn() {
         try {
-            this.driver.findElement(By.xpath("//a[@href='/" + this.userDetails.getUsername() + "/']"));
+            WebElement user = this.driver.findElement(By.xpath("//a[@href='/" + this.userDetails.getUsername() + "/']"));
             System.out.println("//a[@href='/" + this.userDetails.getUsername() + "/']");
         } catch(NoSuchElementException e) {
             System.out.println("You are not logged in. Try login again.");
-            System.out.println("returning false now");
             return false;
         }
-        System.out.println("returning true now");
         return true;
     }
 
@@ -49,8 +48,8 @@ public class BotAuthentication implements IAuth {
 
             Utils.wait(3);
 
-            WebElement removeModal = this.driver.findElement(By.xpath("//button[text() = 'Not Now']"));
-            removeModal.click();
+//            WebElement removeModal = this.driver.findElement(By.xpath("//button[text() = 'Not Now']"));
+//            removeModal.click();
 
         } catch(Exception e) {
             e.printStackTrace();
