@@ -1,7 +1,7 @@
 package BotActions;
 
 import Interfaces.ILiker;
-import Interfaces.LikeStrategy;
+import Interfaces.TypeStrategy;
 import Utility.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -22,8 +22,8 @@ public class BotLiker implements ILiker {
         this.imageLinks = a;
     }
 
-    public boolean likePhotos(LikeStrategy strategy, int numPhotos) {
-       this.imageLinks = strategy.getImageLinks(numPhotos);
+    public boolean likePhotos(TypeStrategy strategy, int numPhotos) {
+       this.addImageLinks(strategy.getImageLinks(numPhotos));
 
         for (String link : this.imageLinks) {
             try {

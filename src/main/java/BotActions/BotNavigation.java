@@ -6,8 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import Utility.*;
 
-import java.util.concurrent.TimeUnit;
-
 public class BotNavigation implements INavigation {
 
     WebDriver driver;
@@ -18,9 +16,13 @@ public class BotNavigation implements INavigation {
         this.userDetails = userDetails;
     }
 
+    public BotNavigation(WebDriver driver){
+        this.driver = driver;
+    }
+
     public boolean goHome() {
         this.driver.navigate().to("https://www.instagram.com/");
-        this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        Utils.wait(3);
         return this.driver.getCurrentUrl().equalsIgnoreCase("https://www.instagram.com/");
     }
 
@@ -36,7 +38,7 @@ public class BotNavigation implements INavigation {
 
     public boolean goToUserPage(String username) {
         this.driver.get("https://www.instagram.com/" + username);
-        this.driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        Utils.wait(4);
 
         try {
             WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
@@ -48,12 +50,12 @@ public class BotNavigation implements INavigation {
     }
 
     public boolean goToHashtag(String hashtag) {
-        String formatedHashtag = "";
+        String formattedHashtag = "";
 
         if(hashtag.contains("#")) {
-            formatedHashtag = hashtag.substring(1);
+            formattedHashtag = hashtag.substring(1);
         } else {
-            formatedHashtag = hashtag;
+            formattedHashtag = hashtag;
             hashtag = "#" + hashtag;
         }
 
@@ -64,7 +66,7 @@ public class BotNavigation implements INavigation {
 
             Utils.wait(2);
 
-            WebElement found = this.driver.findElement(By.cssSelector("a[href='/explore/tags/"+ formatedHashtag + "/'"));
+            WebElement found = this.driver.findElement(By.cssSelector("a[href='/explore/tags/"+ formattedHashtag + "/'"));
             found.click();
         } catch (Exception e) {
             e.printStackTrace();

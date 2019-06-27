@@ -1,19 +1,25 @@
+import static org.junit.jupiter.api.Assertions.*;
+
 import BotActions.BotAuthentication;
+import BotActions.BotFollower;
 import BotActions.BotLiker;
 import BotActions.BotNavigation;
 import LikeStrategy.ExploreStrategy;
+import LikeStrategy.HashtagStrategy;
 import Utility.UserDetails;
 import Utility.Utils;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-class BotLikerTest {
+class BotFollowerTest {
 
     static WebDriver driver;
     static BotNavigation botNav;
+    static BotFollower botFollower;
     static BotLiker botLiker;
     static BotAuthentication botAuthentication;
     static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
@@ -28,76 +34,50 @@ class BotLikerTest {
         options.addArguments("--start-maximized");
         driver = new ChromeDriver(options);
         driver.navigate().to("https://www.instagram.com/grandkosmetics");
-        botNav = new BotNavigation(driver, userDetails);
+        botNav = new BotNavigation(driver);
         botAuthentication = new BotAuthentication(driver, userDetails);
         botLiker = new BotLiker(driver);
+        botFollower = new BotFollower(driver);
     }
-//
+
 //    @Test
-//    void likeHashtagPhotosTest() {
+//    @Order(1)
+//    void followUserTest() {
 //        if (botAuthentication.isLoggedIn()) {
 //            System.out.println("we need to log in ");
 //            botAuthentication.login();
 //        }
 //
-//        botNav.goToHashtag("lipstick");
-//        Utils.wait(3);
+//        boolean followUser = botFollower.followerUser("thenotoriousmma");
 //
-//        boolean likeHashtagPhotos = botLiker.likePhotos(new HashtagStrategy(driver), 10);
-//
-//        System.out.println("liked photos outcome = " + likeHashtagPhotos);
-//
-//        Utils.wait(4);
-//
-//        driver.quit();
-//
+//        assertEquals(true, followUser);
 //    }
 
 //    @Test
-//    void likeHashtagPhotosTest() {
+//    @Order(1)
+//    void followUserThatDoesntExistTest() {
 //        if (botAuthentication.isLoggedIn()) {
 //            System.out.println("we need to log in ");
 //            botAuthentication.login();
 //        }
 //
-//        botNav.goToUserPage("kyliejenner");
-//        Utils.wait(3);
+//        boolean followUser = botFollower.followerUser("useruserusuus");
 //
-//        boolean likeHashtagPhotos = botLiker.likePhotos(new UserStrategy(driver), 10);
-//
-//        System.out.println("liked photos outcome = " + likeHashtagPhotos);
-//
-//        Utils.wait(4);
-//
-//        driver.quit();
-//
+//        assertEquals(false, followUser);
 //    }
 
     @Test
-    void likeHashtagPhotosTest() {
+    @Order(1)
+    void followUsersFromHashtag() {
         if (botAuthentication.isLoggedIn()) {
             System.out.println("we need to log in ");
             botAuthentication.login();
         }
 
-        botNav.goToExplorePage();
-        Utils.wait(3);
+        botNav.goToHashtag("lipstick");
 
-        boolean likeHashtagPhotos = botLiker.likePhotos(new ExploreStrategy(driver), 10);
+        boolean followUser = botFollower.followUsers(new HashtagStrategy(driver), 10);
 
-        System.out.println("liked explorer photos outcome = " + likeHashtagPhotos);
-
-        Utils.wait(4);
-
-        driver.quit();
-
+//        assertEquals(true, followUser);
     }
-
-
-//    @Test
-//    void likeHashtag Test() {
-//        HashtagStrategy botLiker2 = new HashtagStrategy();
-//        boolean loop = botLiker2.likePhotos(19);
-////        assertEquals(2, cols);
-//    }
 }

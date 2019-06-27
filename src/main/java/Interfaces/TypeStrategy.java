@@ -2,7 +2,7 @@ package Interfaces;
 
 import java.util.ArrayList;
 
-public interface LikeStrategy {
+public interface TypeStrategy {
 
     ArrayList getImageLinks(int numPhotos);
 }
