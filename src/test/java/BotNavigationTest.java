@@ -1,3 +1,6 @@
+import BotActions.BotNavigation;
+import Utility.UserDetails;
+import Utility.Utils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.*;
@@ -50,11 +53,11 @@ class BotNavigationTest {
 //    @Order(3)
 //    void goToExplorePageTest() {
 //        boolean goExplore = this.botNav.goToExplorePage();
-//        Utils.wait(2);
+//        Utility.Utils.wait(2);
 //        assertEquals(true, goExplore);
 //        assertEquals(true, this.driver.getCurrentUrl()
 //                .equalsIgnoreCase("https://www.instagram.com/explore/"));
-//        Utils.wait(3);
+//        Utility.Utils.wait(3);
 //    }
 
     @Test

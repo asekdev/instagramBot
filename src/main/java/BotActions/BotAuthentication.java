@@ -1,4 +1,7 @@
+package BotActions;
+
 import Interfaces.IAuth;
+import Utility.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -52,7 +55,7 @@ public class BotAuthentication implements IAuth {
 //            removeModal.click();
 
         } catch(Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return false;
         }
         System.out.println("login success outcome: " + loginSuccess());

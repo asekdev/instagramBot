@@ -1,14 +1,17 @@
+package BotActions;
+
 import Interfaces.INavigation;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import Utility.*;
 
 import java.util.concurrent.TimeUnit;
 
 public class BotNavigation implements INavigation {
 
     WebDriver driver;
-    UserDetails userDetails;
+    public UserDetails userDetails;
 
     public BotNavigation(WebDriver driver, UserDetails userDetails) {
         this.driver = driver;

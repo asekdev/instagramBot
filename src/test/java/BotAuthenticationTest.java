@@ -1,3 +1,6 @@
+import BotActions.BotAuthentication;
+import Utility.UserDetails;
+import Utility.Utils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,7 +25,7 @@ class BotAuthenticationTest {
 //    @Order(1)
 //    void notLoggedIn() {
 //        System.out.println("running first test");
-//        Utils.wait(5);
+//        Utility.Utils.wait(5);
 //        boolean isLoggedIn = botAuth.isLoggedIn();
 //        assertEquals(false, isLoggedIn);
 //

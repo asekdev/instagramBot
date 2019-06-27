@@ -1,76 +1,61 @@
 package LikeStrategy;
 
-import Exceptions.AlreadyLikedException;
 import Interfaces.LikeStrategy;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.*;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+
+import Utility.*;
+
 
 public class HashtagLiker implements LikeStrategy {
 
     private WebDriver driver;
+    private ArrayList<String> imageLinks = new ArrayList<String>();
 
     public HashtagLiker(WebDriver driver) {
         this.driver = driver;
     }
 
-    public boolean likePhotos(int numPhotos) {
-        for (int i = 1; i <= numPhotos; i++) {
-            for (int j = 1; j <= 3; j++) {
+    public HashtagLiker() {
+    }
+
+    public void addLink(String link) {
+        this.imageLinks.add(link);
+    }
+
+    public ArrayList getImageLinks(int numPhotos) {
+        JavascriptExecutor jse = (JavascriptExecutor) this.driver;
+        jse.executeScript("window.scrollBy(0,3000)", "");
+
+        int rows = GridCalculator.determineRows(numPhotos);
+        int cols = 3;
+
+        for (int i = 1; i <= rows; i++) {
+            if (numPhotos / 3 < 1) {
+                cols = GridCalculator.determineCols(rows);
+            }
+
+            for (int j = 1; j <= cols; j++) {
+//                System.out.println("i is now = " + i);
+//                System.out.println("j is now = " + j);
                 try {
-                    String image = "//*[@id=\"react-root\"]/section/main/article/div[1]/div/div/div[1]/div[" + j + "]";
-                    WebElement imageDiv = this.driver.findElement(By.xpath(image));
-                    Actions actions = new Actions(driver);
-                    actions.moveToElement(imageDiv).click().build().perform();
-
-                    this.driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-
-                    //like the image
-                    this.likeImage();
-
+                    Utils.wait(3);
+                    WebElement photo = this.driver.findElement(By.xpath(" //*[@id=\"react-root\"]/section/main/article/div[2]/div/div[" + i + "]/div[" + j + "]/a"));
+                    String imageLink = photo.getAttribute("href");
+                    this.addLink(imageLink);
+                    numPhotos -= 1;
+                    photo = null;
+//                  System.out.println("num photos left " + numPhotos);
+                    if (numPhotos == 0) {
+                        break;
+                    }
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
-                    return false;
-                } catch(AlreadyLikedException e) {
-                    break;
+//                    return false;
                 }
             }
         }
-
-        return true;
+        return this.imageLinks;
     }
-
-    private void likeImage() throws AlreadyLikedException  {
-        try {
-            System.out.println("tying to like photo ");
-            WebElement photo = this.driver.findElement(By.xpath("//button[//span[aria-label='Like']]"));
-            photo.click();
-            Thread.sleep(3000);
-            WebElement closeLikeModal = this.driver.findElement(By.xpath("/html/body/div[3]/button[1]"));
-            closeLikeModal.click();
-
-        } catch(Exception e) {
-            throw new AlreadyLikedException("Already liked image");
-        }
-    }
-
 }
-
-//row1
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[1]/a
-
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[2]
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[1]/div[3]
-
-//row2
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[2]/div[1]
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[2]/div[2]
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[2]/div[3]
-
-//row3
-//*[@id="react-root"]/section/main/article/div[1]/div/div/div[3]/div[1]

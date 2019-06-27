@@ -1,3 +1,5 @@
+package Utility;
+
 public class UserDetails {
 
     private String username;
