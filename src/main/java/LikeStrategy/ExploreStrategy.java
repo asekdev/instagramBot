@@ -16,8 +16,6 @@ public class ExploreStrategy implements TypeStrategy {
         this.driver = driver;
     }
 
-    public ExploreStrategy() {}
-
     public void addLink(String link) {
         this.imageLinks.add(link);
     }

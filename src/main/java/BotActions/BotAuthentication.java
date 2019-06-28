@@ -51,8 +51,8 @@ public class BotAuthentication implements IAuth {
 
             Utils.wait(3);
 
-//            WebElement removeModal = this.driver.findElement(By.xpath("//button[text() = 'Not Now']"));
-//            removeModal.click();
+            WebElement removeModal = this.driver.findElement(By.xpath("//button[text() = 'Not Now']"));
+            removeModal.click();
 
         } catch(Exception e) {
             return false;
@@ -81,7 +81,7 @@ public class BotAuthentication implements IAuth {
 
            WebElement logoutButton = this.driver.findElement(By.xpath("/html/body/div[3]/div/div/div/button[6]"));
            logoutButton.click();
-       } catch(NoSuchElementException e) {
+       } catch(Exception e) {
            return false;
        }
        return true;

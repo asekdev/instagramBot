@@ -21,20 +21,17 @@ class BotAuthenticationTest {
         botAuth = new BotAuthentication(driver, userDetails);
     }
 
-//    @Test
-//    @Order(1)
-//    void notLoggedIn() {
-//        System.out.println("running first test");
-//        Utility.Utils.wait(5);
-//        boolean isLoggedIn = botAuth.isLoggedIn();
-//        assertEquals(false, isLoggedIn);
-//
-//    }
+    @Test
+    @Order(1)
+    void notLoggedIn() {
+        Utility.Utils.wait(5);
+        boolean isLoggedIn = botAuth.isLoggedIn();
+        assertEquals(false, isLoggedIn);
+    }
 
     @Test
     @Order(2)
     void loginSuccess() {
-        System.out.println("running second test");
         Utils.wait(4);
         boolean loginAttempt = botAuth.login();
         assertEquals(true, loginAttempt);
@@ -43,8 +40,6 @@ class BotAuthenticationTest {
     @Test
     @Order(3)
     void isLoggedIn() {
-        System.out.println("running 3rd test");
-
         boolean loggedIn = botAuth.isLoggedIn();
         assertEquals(true, loggedIn);
     }
@@ -52,8 +47,6 @@ class BotAuthenticationTest {
     @Test
     @Order(4)
     void logout() {
-        System.out.println("running final test");
-
         boolean logout = botAuth.logout();
         assertEquals(true, logout);
 

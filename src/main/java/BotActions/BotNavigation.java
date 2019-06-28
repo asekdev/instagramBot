@@ -69,7 +69,7 @@ public class BotNavigation implements INavigation {
             WebElement found = this.driver.findElement(By.cssSelector("a[href='/explore/tags/"+ formattedHashtag + "/'"));
             found.click();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println(hashtag + "does not exist.");
             return false;
         }

@@ -4,6 +4,7 @@ import Interfaces.IFollower;
 import Interfaces.TypeStrategy;
 import Utility.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -20,7 +21,7 @@ public class BotFollower implements IFollower {
         this.botNav = new BotNavigation(this.driver);
     }
 
-    public void addUserLinks(ArrayList a){
+    public void addUserLinks(ArrayList a) {
         this.userLinks = a;
     }
 
@@ -31,11 +32,32 @@ public class BotFollower implements IFollower {
             Utils.wait(3);
             WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button"));
             System.out.println("button text follow -> " + followBtn.getText());
-            if(followBtn.getText().equalsIgnoreCase("Follow")){
+            if (followBtn.getText().equalsIgnoreCase("Follow")) {
                 followBtn.click();
             }
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean unfollowUser(String username) {
+        this.botNav.goToUserPage(username);
+
+        try {
+            Utils.wait(3);
+            WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button"));
+            System.out.println("button text follow -> " + followBtn.getText());
+            if (followBtn.getText().equalsIgnoreCase("following")) {
+                followBtn.click();
+                Utils.wait(3);
+                WebElement confirmUnfollow = this.driver.findElement(By.xpath("/html/body/div[3]/div/div/div[3]/button[1]"));
+                confirmUnfollow.click();
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
             return false;
         }
 
@@ -43,11 +65,40 @@ public class BotFollower implements IFollower {
     }
 
     public boolean unfollowUsers(int numUsers) {
-        return false;
+        try {
+            WebElement followersButton = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/ul/li[3]/a"));
+            followersButton.click();
+
+            Utils.wait(3);
+
+            for(int i=1; i <= numUsers; i++) {
+                if(i % 2 == 0) {
+                    JavascriptExecutor jse = (JavascriptExecutor) this.driver;
+                    jse.executeScript("window.scrollBy(0,1000)", "");
+                    System.out.println("should be scrolling...");
+                }
+                Utils.wait(2);
+                WebElement followerName = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li["+i+"]/div/div[1]/div[2]/div[1]/a"));
+                WebElement followingButton = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li["+i+"]/div/div[2]/button"));
+                WebElement confirmUnfollow;
+
+                followingButton.click();
+                Utils.wait(3);
+
+                confirmUnfollow = this.driver.findElement(By.xpath("/html/body/div[4]/div/div/div[3]/button[1]"));
+                confirmUnfollow.click();
+
+                System.out.println("Unfollowed " + followerName.getText());
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public boolean followUsers(TypeStrategy type, int numUsers) {
-        this.addUserLinks(type.getImageLinks(10));
+        this.addUserLinks(type.getImageLinks(numUsers));
 
         for (String link : this.userLinks) {
             try {
@@ -57,20 +108,16 @@ public class BotFollower implements IFollower {
                 WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/header/div[2]/div[1]/div[2]/button"));
                 WebElement username = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/header/div[2]/div[1]/div[1]/h2/a"));
 
-                System.out.println("getting here 11");
-                System.out.println("follow button text = " + followBtn.getText());
-
                 if (followBtn.getText().equalsIgnoreCase("follow")) {
                     followBtn.click();
                     Utils.wait(3);
                     System.out.println("Followed " + username.getText());
                 }
             } catch (Exception e) {
-                e.getMessage();
+                //e.getMessage();
                 return false;
             }
         }
-
         return true;
     }
 }

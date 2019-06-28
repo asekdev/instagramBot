@@ -1,3 +1,4 @@
+import BotActions.BotAuthentication;
 import BotActions.BotNavigation;
 import Utility.UserDetails;
 import Utility.Utils;
@@ -15,16 +16,18 @@ class BotNavigationTest {
 
     static WebDriver driver;
     static BotNavigation botNav;
+    static BotAuthentication botAuthentication;
     static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
     @BeforeAll
     public static void executeBefore() {
         System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
-        String chromeProfile = "/Users/723352/Library/Application Support/Google/Chrome";
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--user-data-dir="+chromeProfile);
-        options.addArguments("--disable-infobars");
-        options.addArguments("--start-maximized");
-        driver = new ChromeDriver(options);
+//        String chromeProfile = "/Users/723352/Library/Application Support/Google/Chrome";
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--user-data-dir="+chromeProfile);
+//        options.addArguments("--disable-infobars");
+//        options.addArguments("--start-maximized");
+        driver = new ChromeDriver();
+        botAuthentication = new BotAuthentication(driver, userDetails);
         driver.navigate().to("https://www.instagram.com/grandkosmetics");
         botNav = new BotNavigation(driver, userDetails);
     }
@@ -32,6 +35,11 @@ class BotNavigationTest {
     @Test
     @Order(1)
     void goHomeTest() {
+        if (botAuthentication.isLoggedIn()) {
+            System.out.println("we need to log in ");
+            botAuthentication.login();
+        }
+
         boolean goHome = this.botNav.goHome();
         assertEquals(true, goHome);
         assertEquals(true, this.driver.getCurrentUrl()
@@ -49,16 +57,16 @@ class BotNavigationTest {
         Utils.wait(3);
     }
 
-//    @Test
-//    @Order(3)
-//    void goToExplorePageTest() {
-//        boolean goExplore = this.botNav.goToExplorePage();
-//        Utility.Utils.wait(2);
-//        assertEquals(true, goExplore);
-//        assertEquals(true, this.driver.getCurrentUrl()
-//                .equalsIgnoreCase("https://www.instagram.com/explore/"));
-//        Utility.Utils.wait(3);
-//    }
+    @Test
+    @Order(3)
+    void goToExplorePageTest() {
+        boolean goExplore = this.botNav.goToExplorePage();
+        Utility.Utils.wait(2);
+        assertEquals(true, goExplore);
+        assertEquals(true, this.driver.getCurrentUrl()
+                .equalsIgnoreCase("https://www.instagram.com/explore/"));
+        Utility.Utils.wait(3);
+    }
 
     @Test
     @Order(4)
@@ -66,6 +74,7 @@ class BotNavigationTest {
         boolean findUser = this.botNav.goToUserPage("kyliejenner");
         Utils.wait(3);
         assertEquals(true, findUser);
+        assertEquals(this.driver.getCurrentUrl(), "https://www.instagram.com/kyliejenner/");
         Utils.wait(3);
     }
 
@@ -81,7 +90,7 @@ class BotNavigationTest {
     @Test
     @Order(6)
     void goToHashtagTest() {
-        this.botNav.goToUserPage("kyliejenner");
+        this.botNav.goHome();
         boolean hashTag = this.botNav.goToHashtag("#test");
         Utils.wait(3);
         assertEquals(true, hashTag);
@@ -91,7 +100,6 @@ class BotNavigationTest {
     @Test
     @Order(7)
     void goToHashtagNotFormattedTest() {
-        this.botNav.goToUserPage("kyliejenner");
         boolean hashTag = this.botNav.goToHashtag("test");
         Utils.wait(3);
         assertEquals(true, hashTag);
@@ -102,7 +110,6 @@ class BotNavigationTest {
     @Test
     @Order(8)
     void goToHashtagFailure() {
-        this.botNav.goToUserPage("kyliejenner");
         boolean hashTag = this.botNav.goToHashtag("testasdfasdfasdfa");
         Utils.wait(3);
         assertEquals(false, hashTag);
