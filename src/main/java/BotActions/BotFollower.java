@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class BotFollower implements IFollower {
 
@@ -27,16 +28,16 @@ public class BotFollower implements IFollower {
 
     public boolean followerUser(String username) {
         this.botNav.goToUserPage(username);
-
+        this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         try {
-            Utils.wait(3);
-            WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button"));
+            Utils.wait(2);
+            WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[2]/button"));
             System.out.println("button text follow -> " + followBtn.getText());
             if (followBtn.getText().equalsIgnoreCase("Follow")) {
                 followBtn.click();
             }
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             return false;
         }
 

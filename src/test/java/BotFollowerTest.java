@@ -47,7 +47,7 @@ class BotFollowerTest {
             botAuthentication.login();
         }
 
-        boolean followUser = botFollower.followerUser("kendalljenner");
+        boolean followUser = botFollower.followerUser("jesstoj_");
 
         assertEquals(true, followUser);
     }

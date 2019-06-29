@@ -23,17 +23,20 @@ public class BotNavigation implements INavigation {
     public boolean goHome() {
         this.driver.navigate().to("https://www.instagram.com/");
         Utils.wait(3);
-        return this.driver.getCurrentUrl().equalsIgnoreCase("https://www.instagram.com/");
+        return this.driver.getCurrentUrl()
+                .equalsIgnoreCase("https://www.instagram.com/");
     }
 
     public boolean goToProfile() {
         this.driver.navigate().to("https://www.instagram.com/" + userDetails.getUsername());
-        return this.driver.getCurrentUrl().equalsIgnoreCase("https://www.instagram.com/" + userDetails.getUsername() + "/");
+        return this.driver.getCurrentUrl()
+                .equalsIgnoreCase("https://www.instagram.com/" + userDetails.getUsername() + "/");
     }
 
     public boolean goToExplorePage() {
         this.driver.navigate().to("https://www.instagram.com/explore/");
-        return this.driver.getCurrentUrl().equalsIgnoreCase("https://www.instagram.com/explore/");
+        return this.driver.getCurrentUrl()
+                .equalsIgnoreCase("https://www.instagram.com/explore/");
     }
 
     public boolean goToUserPage(String username) {
