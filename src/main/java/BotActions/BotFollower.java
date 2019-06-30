@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class BotFollower implements IFollower {
@@ -29,12 +30,14 @@ public class BotFollower implements IFollower {
     public boolean followerUser(String username) {
         this.botNav.goToUserPage(username);
         this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
         try {
-            Utils.wait(2);
-            WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[2]/button"));
+            WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[1]/button"));
             System.out.println("button text follow -> " + followBtn.getText());
             if (followBtn.getText().equalsIgnoreCase("Follow")) {
                 followBtn.click();
+            } else {
+                System.out.println("Already following " + username);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +54,7 @@ public class BotFollower implements IFollower {
             Utils.wait(3);
             WebElement followBtn = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/div[1]/div[1]/span/span[1]/button"));
             System.out.println("button text follow -> " + followBtn.getText());
-            if (followBtn.getText().equalsIgnoreCase("following")) {
+            if (followBtn.getText().equalsIgnoreCase("following") || followBtn.getText().equalsIgnoreCase("requested")) {
                 followBtn.click();
                 Utils.wait(3);
                 WebElement confirmUnfollow = this.driver.findElement(By.xpath("/html/body/div[3]/div/div/div[3]/button[1]"));
@@ -72,15 +75,15 @@ public class BotFollower implements IFollower {
 
             Utils.wait(3);
 
-            for(int i=1; i <= numUsers; i++) {
-                if(i % 2 == 0) {
+            for (int i = 1; i <= numUsers; i++) {
+                if (i % 2 == 0) {
                     JavascriptExecutor jse = (JavascriptExecutor) this.driver;
                     jse.executeScript("window.scrollBy(0,1000)", "");
                     System.out.println("should be scrolling...");
                 }
                 Utils.wait(2);
-                WebElement followerName = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li["+i+"]/div/div[1]/div[2]/div[1]/a"));
-                WebElement followingButton = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li["+i+"]/div/div[2]/button"));
+                WebElement followerName = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li[" + i + "]/div/div[1]/div[2]/div[1]/a"));
+                WebElement followingButton = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li[" + i + "]/div/div[2]/button"));
                 WebElement confirmUnfollow;
 
                 followingButton.click();
@@ -121,4 +124,6 @@ public class BotFollower implements IFollower {
         }
         return true;
     }
+
+
 }

@@ -25,7 +25,8 @@ class BotLikerTest {
 
     @BeforeAll
     public static void executeBefore() {
-        System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         String chromeProfile = "/Users/723352/Library/Application Support/Google/Chrome";
 //        ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--user-data-dir=" + chromeProfile);
