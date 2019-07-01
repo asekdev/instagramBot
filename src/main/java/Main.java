@@ -12,9 +12,6 @@ public class Main {
 
     public static void main(String[] args){
 
-        //setup the singleton
-
-
         BotSingleton singleton = BotSingleton.getInstance();
         singleton.setDriver(setupChromeDriver());
         String headerText = "";
@@ -24,7 +21,6 @@ public class Main {
 
         try {
              headerText = FigletFont.convertOneLine("autogram");
-
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -35,6 +31,7 @@ public class Main {
         System.out.println("To get started, specify your username and password for Instagram.\n");
 
         UserDetails user = getUserCredentials();
+        singleton.setupBotCredentials(user);
 
         System.out.println("username of object: " + user.getUsername());
         System.out.println("password of object: " + user.getPassword());

@@ -17,6 +17,7 @@ public class BotSingleton {
     private BotNavigation botNav;
     private BotFollower botFollower;
     private BotLiker botLiker;
+    private UserDetails userDetails;
 
     private BotSingleton(){}
 
@@ -32,8 +33,9 @@ public class BotSingleton {
         this.driver = driver;
     }
 
-    public void setupBotCredentials(UserDetails details) {
-        this.botAuth = new BotAuthentication(this.driver, details);
+    public void setupBotCredentials(UserDetails userDetails) {
+        this.userDetails = userDetails;
+        this.botAuth = new BotAuthentication(this.driver, this.userDetails);
         this.botNav = new BotNavigation(this.driver);
         this.botFollower = new BotFollower(this.driver);
         this.botLiker = new BotLiker(this.driver);
