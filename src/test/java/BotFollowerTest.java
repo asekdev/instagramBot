@@ -25,14 +25,14 @@ class BotFollowerTest {
 
     @BeforeAll
     public static void executeBefore() {
-//        System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
-        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+        //System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         String chromeProfile = "/Users/723352/Library/Application Support/Google/Chrome";
-//        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--user-data-dir=" + chromeProfile);
-//        options.addArguments("--disable-infobars");
-//        options.addArguments("--start-maximized");
-        driver = new ChromeDriver(); //re-add options as parameter
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--user-data-dir=" + chromeProfile);
+        options.addArguments("--disable-infobars");
+        options.addArguments("--start-maximized");
+        driver = new ChromeDriver(options); //re-add options as parameter
         driver.navigate().to("https://www.instagram.com/grandkosmetics");
         botNav = new BotNavigation(driver, userDetails);
         botAuthentication = new BotAuthentication(driver, userDetails);
@@ -43,14 +43,16 @@ class BotFollowerTest {
     @Test
     @Order(1)
     void followUserTest() {
-        if (botAuthentication.isLoggedIn()) {
+        if (!botAuthentication.isLoggedIn()) {
             System.out.println("we need to log in ");
             botAuthentication.login();
         }
 
-        boolean followUser = botFollower.followerUser("jesstoj_");
+        boolean followUser = botFollower.followerUser("codev.ski");
 
         assertEquals(true, followUser);
+        Utility.Utils.wait(3);
+        this.driver.quit();
     }
 
     @Test
@@ -64,6 +66,7 @@ class BotFollowerTest {
         boolean followUser = botFollower.followerUser("useruserusuus");
 
         assertEquals(false, followUser);
+        this.driver.quit();
     }
 
     @Test
@@ -83,14 +86,12 @@ class BotFollowerTest {
     @Test
     @Order(4)
     void followUsersFromHashtag() {
-        if (botAuthentication.isLoggedIn()) {
+        if (botAuthentication.isLoggedIn() == true) {
             System.out.println("we need to log in ");
             botAuthentication.login();
         }
-
-        botNav.goToHashtag("lipstick");
         Utils.wait(3);
-        boolean followUser = botFollower.followUsers(new HashtagStrategy(driver), 4);
+        boolean followUser = botFollower.followUsers(new HashtagStrategy(driver, "tan"), 4);
 
         assertEquals(true, followUser);
     }
@@ -103,7 +104,7 @@ class BotFollowerTest {
             botAuthentication.login();
         }
 
-        boolean unfollowUser = botFollower.unfollowUser("jesstoj_");
+        boolean unfollowUser = botFollower.unfollowUser("codev.ski");
 
         assertEquals(true, unfollowUser);
     }

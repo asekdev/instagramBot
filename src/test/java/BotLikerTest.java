@@ -41,15 +41,15 @@ class BotLikerTest {
 
     @Test
     void likeHashtagPhotosTest() {
-        if (botAuthentication.isLoggedIn()) {
+        if (!botAuthentication.isLoggedIn()) {
             System.out.println("we need to log in ");
             botAuthentication.login();
         }
 
-        botNav.goToHashtag("lipstick");
+
         Utils.wait(3);
 
-        boolean likeHashtagPhotos = botLiker.likePhotos(new HashtagStrategy(driver), 3);
+        boolean likeHashtagPhotos = botLiker.likePhotos(new HashtagStrategy(driver, "botox"), 3);
 
         System.out.println("liked photos outcome = " + likeHashtagPhotos);
 
@@ -64,10 +64,10 @@ class BotLikerTest {
             botAuthentication.login();
         }
 
-        botNav.goToUserPage("kimkardashian");
+//        botNav.goToUserPage("kimkardashian");
         Utils.wait(3);
 
-        boolean likeUserPhotos = botLiker.likePhotos(new UserStrategy(driver), 4);
+        boolean likeUserPhotos = botLiker.likePhotos(new UserStrategy(driver, "jamescharles"), 4);
 
         Utils.wait(3);
 

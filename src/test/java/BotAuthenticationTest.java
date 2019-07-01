@@ -24,9 +24,11 @@ class BotAuthenticationTest {
     @Test
     @Order(1)
     void notLoggedIn() {
+        this.driver.navigate().to("https://www.instagram.com/explore/");
         Utility.Utils.wait(5);
         boolean isLoggedIn = botAuth.isLoggedIn();
         assertEquals(false, isLoggedIn);
+        this.driver.quit();
     }
 
     @Test

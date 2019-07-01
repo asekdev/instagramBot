@@ -19,13 +19,12 @@ public class BotAuthentication implements IAuth {
 
     public boolean isLoggedIn() {
         try {
-            WebElement user = this.driver.findElement(By.xpath("//a[@href='/" + this.userDetails.getUsername() + "/']"));
-            System.out.println("//a[@href='/" + this.userDetails.getUsername() + "/']");
+            WebElement loginButton = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button"));
         } catch(NoSuchElementException e) {
-            System.out.println("You are not logged in. Try login again.");
-            return false;
+            return true;
         }
-        return true;
+        System.out.println("You are not logged in. Try login again.");
+        return false;
     }
 
     public boolean login() {

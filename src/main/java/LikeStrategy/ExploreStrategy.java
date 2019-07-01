@@ -1,5 +1,6 @@
 package LikeStrategy;
 
+import BotActions.BotNavigation;
 import Interfaces.TypeStrategy;
 import Utility.GridCalculator;
 import Utility.Utils;
@@ -11,9 +12,11 @@ public class ExploreStrategy implements TypeStrategy {
 
     private WebDriver driver;
     private ArrayList<String> imageLinks = new ArrayList<String>();
+    private BotNavigation botNavigation;
 
     public ExploreStrategy(WebDriver driver) {
         this.driver = driver;
+        this.botNavigation = new BotNavigation(this.driver);
     }
 
     public void addLink(String link) {
@@ -21,6 +24,7 @@ public class ExploreStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
+        this.botNavigation.goToExplorePage();
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         jse.executeScript("window.scrollBy(0,3000)", "");
 

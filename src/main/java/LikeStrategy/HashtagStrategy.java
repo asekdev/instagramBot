@@ -1,5 +1,6 @@
 package LikeStrategy;
 
+import BotActions.BotNavigation;
 import Interfaces.TypeStrategy;
 import org.openqa.selenium.*;
 
@@ -12,18 +13,29 @@ public class HashtagStrategy implements TypeStrategy {
 
     private WebDriver driver;
     private ArrayList<String> imageLinks = new ArrayList<String>();
+    private BotNavigation botNav;
+    private String hashtag;
 
-    public HashtagStrategy(WebDriver driver) {
+    public HashtagStrategy(WebDriver driver, String hashtag) {
         this.driver = driver;
+        this.botNav = new BotNavigation(this.driver);
+        this.hashtag = hashtag;
     }
 
-    public HashtagStrategy() {}
+    public String getHashtag() {
+        return hashtag;
+    }
+
+    public void setHashtag(String hashtag) {
+        this.hashtag = hashtag;
+    }
 
     public void addLink(String link) {
         this.imageLinks.add(link);
     }
 
     public ArrayList getImageLinks(int numPhotos) {
+        this.botNav.goToHashtag(this.getHashtag());
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         jse.executeScript("window.scrollBy(0,3000)", "");
 

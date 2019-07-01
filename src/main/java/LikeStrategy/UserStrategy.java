@@ -1,5 +1,6 @@
 package LikeStrategy;
 
+import BotActions.BotNavigation;
 import Interfaces.TypeStrategy;
 import Utility.GridCalculator;
 import Utility.Utils;
@@ -11,9 +12,21 @@ public class UserStrategy implements TypeStrategy {
 
     private WebDriver driver;
     private ArrayList<String> imageLinks = new ArrayList<String>();
+    private BotNavigation botNav;
+    private String username;
 
-    public UserStrategy(WebDriver driver) {
+    public UserStrategy(WebDriver driver, String username) {
         this.driver = driver;
+        this.botNav = new BotNavigation(this.driver);
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void addLink(String link) {
@@ -21,6 +34,7 @@ public class UserStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
+        this.botNav.goToUserPage(this.getUsername());
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         jse.executeScript("window.scrollBy(0,3000)", "");
 
