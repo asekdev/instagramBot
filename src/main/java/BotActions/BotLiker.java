@@ -22,8 +22,16 @@ public class BotLiker implements ILiker {
         this.imageLinks = a;
     }
 
+    public int getImageLinkSize() {
+        return this.imageLinks.size();
+    }
+
     public boolean likePhotos(TypeStrategy strategy, int numPhotos) {
        this.addImageLinks(strategy.getImageLinks(numPhotos));
+
+       if(this.getImageLinkSize() == 0) {
+           return false;
+       }
 
         for (String link : this.imageLinks) {
             try {

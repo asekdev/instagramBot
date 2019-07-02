@@ -1,3 +1,6 @@
+import LikeStrategy.ExploreStrategy;
+import LikeStrategy.HashtagStrategy;
+import LikeStrategy.UserStrategy;
 import Singleton.BotSingleton;
 import Utility.UserDetails;
 import com.github.lalyos.jfiglet.FigletFont;
@@ -24,8 +27,6 @@ public class Main {
             e.printStackTrace();
         }
 
-
-
         //start the initial
         System.out.println(headerText);
         System.out.println("Welcome to Instagram Automation Bot!");
@@ -42,21 +43,29 @@ public class Main {
                 case 1:
                     showFollowOptions();
                     System.out.print("Your option: ");
-
                     return;
                 case 2:
                     showLikeOptions();
-                    return;
+                    System.out.print("Your option: ");
+
+                    try {
+                        int likeOption = scan.nextInt();
+                        likeOptions(likeOption);
+                    } catch (Exception e) {
+                        System.out.println("Please specify a valid option.");
+                    }
+                    break;
                 case 3:
                     singleton.botAuth.logout();
-                    System.out.println("Login\n");
+                    System.out.println("\nLogin with a different account\n");
                     singleton.getDriver().quit();
                     userInputLogin();
-                    return;
+                    break;
                 case 4:
                     singleton.botAuth.logout();
                     System.out.println("Quitting application... Goodbye!");
                     System.exit(0);
+                    return;
             }
         }
 
@@ -89,11 +98,12 @@ public class Main {
         BotSingleton singleton = BotSingleton.getInstance();
         singleton.setDriver(setupChromeDriver());
         boolean authorised = false;
-        UserDetails user = getUserCredentials();
-        singleton.setupBotCredentials(user);
+//        UserDetails user = getUserCredentials();
+//        singleton.setupBotCredentials(user);
 
         while(!authorised) {
-            System.out.println("Logging in...");
+            UserDetails user = getUserCredentials();
+            singleton.setupBotCredentials(user);
             boolean login = singleton.botAuth.login();
 
             if(login) {
@@ -101,8 +111,6 @@ public class Main {
                 authorised = true;
             } else {
                 System.out.println("Authentication failed, try again.");
-                user = getUserCredentials();
-                singleton.setupBotCredentials(user);
             }
         }
     }
@@ -134,6 +142,46 @@ public class Main {
         System.out.println("2) Like Photos on explore page");
         System.out.println("3) Like a users photos\n");
         System.out.println("4) Back to Main Menu");
+    }
+
+    public static void likeOptions(int option) {
+        BotSingleton singleton = BotSingleton.getInstance();
+        Scanner scan = new Scanner(System.in);
+        int numPhotos = 0;
+
+        boolean validOption = false;
+
+        while(!validOption){
+            switch(option) {
+                case 1:
+                    System.out.print("Specify a hashtag: ");
+                    String hashtag = scan.next();
+                    System.out.print("\nNumber of photos to like: ");
+                    numPhotos = scan.nextInt();
+                    singleton.likePhotos(new HashtagStrategy(singleton.getDriver(), hashtag), numPhotos);
+                    validOption = true;
+                    break;
+                case 2:
+                    System.out.print("\nNumber of photos to like on Explore page: ");
+                    numPhotos = scan.nextInt();
+                    singleton.likePhotos(new ExploreStrategy(singleton.getDriver()), numPhotos);
+                    validOption = true;
+                    break;
+                case 3:
+                    System.out.print("Specify a user: ");
+                    String username = scan.next();
+                    System.out.print("\nNumber of photos to like: ");
+                    numPhotos = scan.nextInt();
+                    singleton.likePhotos(new UserStrategy(singleton.getDriver(), username), numPhotos);
+                    validOption = true;
+                    break;
+                default:
+                    System.out.println("Please specify a valid option.");
+                    validOption = true;
+                    break;
+            }
+        }
+
     }
 
 }

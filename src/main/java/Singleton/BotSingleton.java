@@ -48,9 +48,9 @@ public class BotSingleton {
 
         if(likePhotos) {
             System.out.println("Liking completed successfully!");
-        } else {
-            System.out.println("Something went wrong... Try again");
         }
+
+        this.botNav.goHome();
     }
 
     public void followUsers(TypeStrategy type, int numUsers) {
@@ -62,6 +62,8 @@ public class BotSingleton {
         } else {
             System.out.println("Something went wrong... Try again");
         }
+
+        this.botNav.goHome();
     }
 
     public void followUser(String username) {

@@ -34,7 +34,13 @@ public class UserStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
-        this.botNav.goToUserPage(this.getUsername());
+        boolean pageExsits = this.botNav.goToUserPage(this.getUsername());
+//        boolean isPublic = this.botNav.isPublicAccount(this.getUsername());
+
+        if(!pageExsits) {
+            return this.imageLinks;
+        }
+
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         jse.executeScript("window.scrollBy(0,3000)", "");
 
@@ -62,7 +68,8 @@ public class UserStrategy implements TypeStrategy {
                         break;
                     }
                 } catch (NoSuchElementException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    break;
                 }
             }
         }

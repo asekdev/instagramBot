@@ -2,9 +2,12 @@ package BotActions;
 
 import Interfaces.INavigation;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import Utility.*;
+
+import java.util.List;
 
 public class BotNavigation implements INavigation {
 
@@ -46,9 +49,27 @@ public class BotNavigation implements INavigation {
         try {
             WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
         } catch (Exception e) {
-            System.out.println(username + "'s page exists!");
+            boolean exists = isPublicAccount(username);
+            return exists;
+        }
+        System.out.println(username + "'s page doesnt exist!");
+        return false;
+    }
+
+    public boolean isPublicAccount(String username) {
+        try {
+            List<WebElement> privateAccountConatiner = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/div[1]/div/*"));
+            for(WebElement el : privateAccountConatiner) {
+                String notFound = "This Account is Private";
+                if(el.getText().equalsIgnoreCase(notFound)) {
+                    System.out.println(username + "'s account is private. Request a follow before attempting to like their photos");
+                    return false;
+                }
+            }
+        } catch (NoSuchElementException e) {
             return true;
         }
+        System.out.println(username + "'s account is private. Request a follow before attempting to like their photos");
         return false;
     }
 
