@@ -13,7 +13,7 @@ public class BotSingleton {
     private static BotSingleton instance = null;
 
     private WebDriver driver;
-    private BotAuthentication botAuth;
+    public BotAuthentication botAuth;
     private BotNavigation botNav;
     private BotFollower botFollower;
     private BotLiker botLiker;
@@ -29,6 +29,7 @@ public class BotSingleton {
         return instance;
     }
 
+    public WebDriver getDriver() { return this.driver; }
     public void setDriver(WebDriver driver) {
         this.driver = driver;
     }

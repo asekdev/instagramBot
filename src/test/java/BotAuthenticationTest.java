@@ -12,7 +12,7 @@ class BotAuthenticationTest {
 
     static WebDriver driver;
     static BotAuthentication botAuth;
-    static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
+    static UserDetails userDetails = new UserDetails("ahhhahhh", "2333forrty!");
 
     @BeforeAll
     public static void executeBefore() {
@@ -41,13 +41,21 @@ class BotAuthenticationTest {
 
     @Test
     @Order(3)
+    void loginFailed() {
+
+        boolean loginAttempt = botAuth.login();
+        assertEquals(false, loginAttempt);
+    }
+
+    @Test
+    @Order(4)
     void isLoggedIn() {
         boolean loggedIn = botAuth.isLoggedIn();
         assertEquals(true, loggedIn);
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     void logout() {
         boolean logout = botAuth.logout();
         assertEquals(true, logout);
