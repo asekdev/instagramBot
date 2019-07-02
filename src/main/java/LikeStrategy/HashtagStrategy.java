@@ -60,7 +60,7 @@ public class HashtagStrategy implements TypeStrategy {
 
             for (int j = 1; j <= cols; j++) {
                 try {
-//                    Utils.wait(3);
+                    Utils.wait(3);
                     WebElement photo = this.driver.findElement(By.xpath(" //*[@id=\"react-root\"]/section/main/article/div[2]/div/div[" + i + "]/div[" + j + "]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
