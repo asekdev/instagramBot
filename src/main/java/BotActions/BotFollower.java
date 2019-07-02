@@ -129,8 +129,8 @@ public class BotFollower implements IFollower {
                     System.out.println("Followed " + username.getText());
                 }
             } catch (Exception e) {
-                //e.getMessage();
-                return false;
+                e.printStackTrace();
+//                return false;
             }
         }
         return true;

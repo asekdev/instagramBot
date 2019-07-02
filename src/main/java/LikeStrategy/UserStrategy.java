@@ -58,16 +58,10 @@ public class UserStrategy implements TypeStrategy {
                 cols = GridCalculator.determineCols(rows);
             }
 
-            if(i % 10 == 0){
-                jse.executeScript("window.scrollBy(0,1500)", "");
-            }
-
             for (int j = 1; j <= cols; j++) {
                 try {
                     Utils.wait(3);
                     WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div[2]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
-                                                                         //*[@id="react-root"]/section/main/div/div[3]/article/div[1]/div/div[1]/div[1]/a
-                    //*[@id="react-root"]/section/main/div/div[2]/article/div[1]/div/div[1]
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
                     System.out.println("image link = " + imageLink);

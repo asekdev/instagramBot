@@ -54,10 +54,6 @@ public class HashtagStrategy implements TypeStrategy {
                 cols = GridCalculator.determineCols(rows);
             }
 
-            if (i % 10 == 0) {
-                jse.executeScript("window.scrollBy(0,1500)", "");
-            }
-
             for (int j = 1; j <= cols; j++) {
                 try {
                     Utils.wait(3);
