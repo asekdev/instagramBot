@@ -26,7 +26,15 @@ public class ExploreStrategy implements TypeStrategy {
     public ArrayList getImageLinks(int numPhotos) {
         this.botNavigation.goToExplorePage();
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
-        jse.executeScript("window.scrollBy(0,3000)", "");
+        int lengthToScroll = numPhotos * 180;
+        String scrollLength =  String.valueOf(lengthToScroll);
+        System.out.println("scrolling by " + scrollLength + "pixels");
+        jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
+
+        for(int i=1; i < numPhotos / 2; i++) {
+            Utils.wait(4);
+            jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
+        }
 
         int rows = GridCalculator.determineRows(numPhotos);
         int cols = 3;
@@ -42,7 +50,7 @@ public class ExploreStrategy implements TypeStrategy {
 
             for (int j = 1; j <= cols; j++) {
                 try {
-                    Utils.wait(3);
+//                    Utils.wait(3);
                     WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/article/div[1]/div/div["+i+"]/div["+j+"]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
@@ -53,6 +61,8 @@ public class ExploreStrategy implements TypeStrategy {
                     }
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
+                } catch (StaleElementReferenceException e) {
+                    System.out.println("cause stale");
                 }
             }
         }

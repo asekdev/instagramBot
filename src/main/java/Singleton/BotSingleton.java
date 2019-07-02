@@ -37,7 +37,7 @@ public class BotSingleton {
     public void setupBotCredentials(UserDetails userDetails) {
         this.userDetails = userDetails;
         this.botAuth = new BotAuthentication(this.driver, this.userDetails);
-        this.botNav = new BotNavigation(this.driver);
+        this.botNav = new BotNavigation(this.driver, this.userDetails);
         this.botFollower = new BotFollower(this.driver);
         this.botLiker = new BotLiker(this.driver);
     }
@@ -69,16 +69,20 @@ public class BotSingleton {
     public void followUser(String username) {
         checkAuthorised();
         this.botFollower.followerUser(username);
+        this.botNav.goHome();
     }
 
     public void unfollowUser(String username) {
         checkAuthorised();
         this.botFollower.unfollowUser(username);
+        this.botNav.goHome();
     }
 
     public void unfollowUsers(int numUsers) {
         checkAuthorised();
+        this.botNav.goToProfile();
         this.botFollower.unfollowUsers(numUsers);
+        this.botNav.goHome();
     }
 
     private void checkAuthorised() {

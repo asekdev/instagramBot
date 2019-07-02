@@ -27,12 +27,12 @@ public class BotFollower implements IFollower {
     }
 
     public boolean followerUser(String username) {
-        this.botNav.goToUserPage(username);
+        this.botNav.goToUserPageToFollow(username);
         this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
         try {
             List<WebElement> userHeader = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/*/*"));
-            System.out.println("size of elements " + userHeader.size());
+//            System.out.println("size of elements " + userHeader.size());
             WebElement followBtn = null;
 
             for (WebElement e : userHeader) {
@@ -41,7 +41,7 @@ public class BotFollower implements IFollower {
                 }
             }
 
-            System.out.println("button text follow -> " + followBtn.getText());
+//            System.out.println("button text follow -> " + followBtn.getText());
             if (followBtn.getText().equalsIgnoreCase("Follow")) {
                 followBtn.click();
             } else {
@@ -56,12 +56,12 @@ public class BotFollower implements IFollower {
     }
 
     public boolean unfollowUser(String username) {
-        this.botNav.goToUserPage(username);
+        this.botNav.goToUserPageToFollow(username);
 
         try {
             Utils.wait(3);
             List<WebElement> userHeader = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/*/*"));
-            System.out.println("size of elements " + userHeader.size());
+//            System.out.println("size of elements " + userHeader.size());
             WebElement unfollowBtn = null;
 
             for (WebElement e : userHeader) {
@@ -91,7 +91,7 @@ public class BotFollower implements IFollower {
                 if (i % 5 == 0) {
                     JavascriptExecutor jse = (JavascriptExecutor) this.driver;
                     jse.executeScript("window.scrollBy(0,1000)", "");
-                    System.out.println("should be scrolling...");
+//                    System.out.println("should be scrolling...");
                 }
                 Utils.wait(2);
                 WebElement followerName = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li[" + i + "]/div/div[1]/div[2]/div[1]/a"));

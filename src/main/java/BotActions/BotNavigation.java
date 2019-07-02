@@ -31,7 +31,7 @@ public class BotNavigation implements INavigation {
     }
 
     public boolean goToProfile() {
-        this.driver.navigate().to("https://www.instagram.com/" + userDetails.getUsername());
+        this.driver.navigate().to("https://www.instagram.com/" + userDetails.getUsername()+"/");
         return this.driver.getCurrentUrl()
                 .equalsIgnoreCase("https://www.instagram.com/" + userDetails.getUsername() + "/");
     }
@@ -42,7 +42,7 @@ public class BotNavigation implements INavigation {
                 .equalsIgnoreCase("https://www.instagram.com/explore/");
     }
 
-    public boolean goToUserPage(String username) {
+    public boolean goToUserPageToLike(String username) {
         this.driver.get("https://www.instagram.com/" + username);
         Utils.wait(4);
 
@@ -50,7 +50,21 @@ public class BotNavigation implements INavigation {
             WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
         } catch (Exception e) {
             boolean exists = isPublicAccount(username);
+            System.out.println("does page exist = " + exists);
             return exists;
+        }
+        System.out.println(username + "'s page doesnt exist!");
+        return false;
+    }
+
+    public boolean goToUserPageToFollow(String username) {
+        this.driver.get("https://www.instagram.com/" + username);
+        Utils.wait(4);
+
+        try {
+            WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
+        } catch (Exception e) {
+            return true;
         }
         System.out.println(username + "'s page doesnt exist!");
         return false;
@@ -69,8 +83,7 @@ public class BotNavigation implements INavigation {
         } catch (NoSuchElementException e) {
             return true;
         }
-        System.out.println(username + "'s account is private. Request a follow before attempting to like their photos");
-        return false;
+        return true;
     }
 
     public boolean goToHashtag(String hashtag) {

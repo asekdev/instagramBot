@@ -43,17 +43,14 @@ public class Main {
                 case 1:
                     showFollowOptions();
                     System.out.print("Your option: ");
-                    return;
+                    int followOption = scan.nextInt();
+                    followOptions(followOption);
+                    break;
                 case 2:
                     showLikeOptions();
                     System.out.print("Your option: ");
-
-                    try {
-                        int likeOption = scan.nextInt();
-                        likeOptions(likeOption);
-                    } catch (Exception e) {
-                        System.out.println("Please specify a valid option.");
-                    }
+                    int likeOption = scan.nextInt();
+                    likeOptions(likeOption);
                     break;
                 case 3:
                     singleton.botAuth.logout();
@@ -62,8 +59,10 @@ public class Main {
                     userInputLogin();
                     break;
                 case 4:
+                    System.out.println("Closing application...");
                     singleton.botAuth.logout();
-                    System.out.println("Quitting application... Goodbye!");
+                    singleton.getDriver().quit();
+                    System.out.println("Application closed... Goodbye!");
                     System.exit(0);
                     return;
             }
@@ -173,6 +172,62 @@ public class Main {
                     System.out.print("\nNumber of photos to like: ");
                     numPhotos = scan.nextInt();
                     singleton.likePhotos(new UserStrategy(singleton.getDriver(), username), numPhotos);
+                    validOption = true;
+                    break;
+                case 4:
+                    validOption = true;
+                    break;
+                default:
+                    System.out.println("Please specify a valid option.");
+                    validOption = true;
+                    break;
+            }
+        }
+
+    }
+
+    public static void followOptions(int option) {
+        BotSingleton singleton = BotSingleton.getInstance();
+        Scanner scan = new Scanner(System.in);
+        int numUsers = 0;
+
+        boolean validOption = false;
+
+        while(!validOption){
+            switch(option) {
+                case 1:
+                    System.out.print("Specify a hashtag: ");
+                    String hashtag = scan.next();
+                    System.out.print("\nNumber of users to follow: ");
+                    numUsers = scan.nextInt();
+                    singleton.followUsers(new HashtagStrategy(singleton.getDriver(), hashtag), numUsers );
+                    validOption = true;
+                    break;
+                case 2:
+                    System.out.print("\nNumber of users to follow on Explore page: ");
+                    numUsers = scan.nextInt();
+                    singleton.followUsers(new ExploreStrategy(singleton.getDriver()), numUsers );
+                    validOption = true;
+                    break;
+                case 3:
+                    System.out.print("Specify a user: ");
+                    String username = scan.next();
+                    singleton.followUser(username);
+                    validOption = true;
+                    break;
+                case 4:
+                    System.out.print("Specify a user to unfollow: ");
+                    username = scan.next();
+                    singleton.unfollowUser(username);
+                    validOption = true;
+                    break;
+                case 5:
+                    System.out.print("Number of users to unfollow: ");
+                    numUsers = scan.nextInt();
+                    singleton.unfollowUsers(numUsers);
+                    validOption = true;
+                    break;
+                case 6:
                     validOption = true;
                     break;
                 default:

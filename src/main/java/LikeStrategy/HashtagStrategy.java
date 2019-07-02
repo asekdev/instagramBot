@@ -35,9 +35,16 @@ public class HashtagStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
-        this.botNav.goToHashtag(this.getHashtag());
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
-        jse.executeScript("window.scrollBy(0,3000)", "");
+        this.botNav.goToHashtag(this.getHashtag());
+
+        int lengthToScroll = numPhotos * 150;
+        String scrollLength = String.valueOf(lengthToScroll);
+
+        for (int i = 1; i < numPhotos / 3; i++) {
+            Utils.wait(4);
+            jse.executeScript("window.scrollBy(0," + scrollLength + ")", "");
+        }
 
         int rows = GridCalculator.determineRows(numPhotos);
         int cols = 3;
@@ -47,13 +54,13 @@ public class HashtagStrategy implements TypeStrategy {
                 cols = GridCalculator.determineCols(rows);
             }
 
-            if(i % 10 == 0){
+            if (i % 10 == 0) {
                 jse.executeScript("window.scrollBy(0,1500)", "");
             }
 
             for (int j = 1; j <= cols; j++) {
                 try {
-                    Utils.wait(3);
+//                    Utils.wait(3);
                     WebElement photo = this.driver.findElement(By.xpath(" //*[@id=\"react-root\"]/section/main/article/div[2]/div/div[" + i + "]/div[" + j + "]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
@@ -64,6 +71,8 @@ public class HashtagStrategy implements TypeStrategy {
                     }
                 } catch (NoSuchElementException e) {
                     e.printStackTrace();
+                } catch (StaleElementReferenceException e) {
+                    System.out.println("cause stale");
                 }
             }
         }
