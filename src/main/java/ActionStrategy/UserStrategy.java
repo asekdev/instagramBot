@@ -36,19 +36,21 @@ public class UserStrategy implements TypeStrategy {
     public ArrayList getImageLinks(int numPhotos) {
         boolean pageExsits = this.botNav.goToUserPage(this.getUsername(), "like");
 
-        System.out.println("page exists for image link = " + pageExsits);
+//        System.out.println("page exists for image link = " + pageExsits);
         if(!pageExsits) {
             return this.imageLinks;
         }
 
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
-        int lengthToScroll = numPhotos * 160;
-        String scrollLength =  String.valueOf(lengthToScroll);
+//        int lengthToScroll = numPhotos * 160;
+//        String scrollLength =  String.valueOf(lengthToScroll);
+//
+//        for(int i=1; i < numPhotos / 2; i++) {
+//            Utils.wait(4);
+//            jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
+//        }
 
-        for(int i=1; i < numPhotos / 2; i++) {
-            Utils.wait(4);
-            jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
-        }
+        Utils.scrollWindowDown(this.driver, numPhotos);
 
         int rows = GridCalculator.determineRows(numPhotos);
         int cols = 3;
@@ -64,7 +66,7 @@ public class UserStrategy implements TypeStrategy {
                     WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div[2]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
-                    System.out.println("image link = " + imageLink);
+//                    System.out.println("image link = " + imageLink);
                     numPhotos -= 1;
                     photo = null;
                     if (numPhotos == 0) {
@@ -74,11 +76,11 @@ public class UserStrategy implements TypeStrategy {
                     e.printStackTrace();
 
                 } catch (StaleElementReferenceException e) {
-                    System.out.println("cause stale");
+//                    System.out.println("cause stale");
                 }
             }
         }
-        System.out.println("image link size = " + this.imageLinks.size());
+//        System.out.println("image link size = " + this.imageLinks.size());
         return this.imageLinks;
     }
 }

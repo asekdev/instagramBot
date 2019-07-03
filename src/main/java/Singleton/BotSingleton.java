@@ -81,7 +81,12 @@ public class BotSingleton {
     public void unfollowUsers(int numUsers) {
         checkAuthorised();
         this.botNav.goToProfile();
-        this.botFollower.unfollowUsers(numUsers);
+        boolean unfollowUsers = this.botFollower.unfollowUsers(numUsers);
+        if(unfollowUsers) {
+            System.out.println("Successfully unfollowed " + numUsers +" users");
+        } else {
+            System.out.println("Something happened while trying to unfollow users.");
+        }
         this.botNav.goHome();
     }
 

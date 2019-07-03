@@ -42,13 +42,7 @@ public class HashtagStrategy implements TypeStrategy {
             return this.imageLinks;
         }
 
-        int lengthToScroll = numPhotos * 150;
-        String scrollLength = String.valueOf(lengthToScroll);
-
-        for (int i = 1; i < numPhotos / 3; i++) {
-            Utils.wait(4);
-            jse.executeScript("window.scrollBy(0," + scrollLength + ")", "");
-        }
+        Utils.scrollWindowDown(this.driver, numPhotos);
 
         int rows = GridCalculator.determineRows(numPhotos);
         int cols = 3;
@@ -70,10 +64,9 @@ public class HashtagStrategy implements TypeStrategy {
                         break;
                     }
                 } catch (NoSuchElementException e) {
-                    e.printStackTrace();
-                } catch (StaleElementReferenceException e) {
-                    System.out.println("cause stale");
-                }
+                    //e.printStackTrace();
+                    System.out.println("Cannot find image");
+                } catch (StaleElementReferenceException e) {}
             }
         }
         return this.imageLinks;

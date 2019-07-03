@@ -51,7 +51,6 @@ public class BotNavigation implements INavigation {
         } catch (Exception e) {
            if(actionType.equalsIgnoreCase("like")) {
                boolean exists = isPublicAccount(username);
-               System.out.println("does page exist = " + exists);
                return exists;
            }
            return true;
@@ -59,19 +58,6 @@ public class BotNavigation implements INavigation {
         System.out.println(username + "'s page doesnt exist!");
         return false;
     }
-
-//    public boolean goToUserPageToFollow(String username) {
-//        this.driver.get("https://www.instagram.com/" + username);
-//        Utils.wait(4);
-//
-//        try {
-//            WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
-//        } catch (Exception e) {
-//            return true;
-//        }
-//        System.out.println(username + "'s page doesnt exist!");
-//        return false;
-//    }
 
     public boolean isPublicAccount(String username) {
         try {

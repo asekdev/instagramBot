@@ -68,24 +68,24 @@ class BotNavigationTest {
         Utility.Utils.wait(3);
     }
 
-//    @Test
-//    @Order(4)
-//    void goToUserPageTest() {
-//        boolean findUser = this.botNav.go("kyliejenner");
-//        Utils.wait(3);
-//        assertEquals(true, findUser);
-//        assertEquals(this.driver.getCurrentUrl(), "https://www.instagram.com/kyliejenner/");
-//        Utils.wait(3);
-//    }
+    @Test
+    @Order(4)
+    void goToUserPageTest() {
+        boolean findUser = this.botNav.goToUserPage("kyliejenner", "like");
+        Utils.wait(3);
+        assertEquals(true, findUser);
+        assertEquals(this.driver.getCurrentUrl(), "https://www.instagram.com/kyliejenner/");
+        Utils.wait(3);
+    }
 
-//    @Test
-//    @Order(5)
-//    void goToUserPageTestFailure() {
-//        boolean findUser = this.botNav.goToUserPage("kylieasdfasdfasdfjenner");
-//        Utils.wait(3);
-//        assertEquals(false, findUser);
-//        Utils.wait(3);
-//    }
+    @Test
+    @Order(5)
+    void goToUserPageTestFailure() {
+        boolean findUser = this.botNav.goToUserPage("kylieasdfasdfasdfjenner","like");
+        Utils.wait(3);
+        assertEquals(false, findUser);
+        Utils.wait(3);
+    }
 
     @Test
     @Order(6)

@@ -79,6 +79,8 @@ public class BotFollower implements IFollower {
                     Utils.wait(3);
                     WebElement confirmUnfollow = this.driver.findElement(By.xpath("/html/body/div[3]/div/div/div[3]/button[1]"));
                     confirmUnfollow.click();
+                } else if(e.getText().equalsIgnoreCase("Follow")) {
+                    System.out.println("You're not following " + username + ". Cannot unfollow user that is not being followed.");
                 }
             }
         } catch (Exception e) {
@@ -99,7 +101,6 @@ public class BotFollower implements IFollower {
                 if (i % 5 == 0) {
                     JavascriptExecutor jse = (JavascriptExecutor) this.driver;
                     jse.executeScript("window.scrollBy(0,1000)", "");
-//                    System.out.println("should be scrolling...");
                 }
                 Utils.wait(2);
                 WebElement followerName = this.driver.findElement(By.xpath("/html/body/div[3]/div/div[2]/ul/div/li[" + i + "]/div/div[1]/div[2]/div[1]/a"));
@@ -124,6 +125,10 @@ public class BotFollower implements IFollower {
     public boolean followUsers(TypeStrategy type, int numUsers) {
         this.addUserLinks(type.getImageLinks(numUsers));
 
+        if(this.userLinks.size() == 0){
+            return false;
+        }
+
         for (String link : this.userLinks) {
             try {
                 this.driver.navigate().to(link);
@@ -137,8 +142,8 @@ public class BotFollower implements IFollower {
                     System.out.println("Followed " + username.getText());
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-//                return false;
+                //e.printStackTrace();
+                return false;
             }
         }
         return true;
