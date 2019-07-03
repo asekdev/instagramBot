@@ -49,9 +49,12 @@ public class BotNavigation implements INavigation {
         try {
             WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
         } catch (Exception e) {
-            boolean exists = isPublicAccount(username);
-            System.out.println("does page exist = " + exists);
-            return exists;
+//           if(actionType.equalsIgnoreCase("like")) {
+//               boolean exists = isPublicAccount(username);
+//               System.out.println("does page exist = " + exists);
+//               return exists;
+//           }
+           return true;
         }
         System.out.println(username + "'s page doesnt exist!");
         return false;
@@ -107,7 +110,7 @@ public class BotNavigation implements INavigation {
             found.click();
         } catch (Exception e) {
             //e.printStackTrace();
-            System.out.println(hashtag + "does not exist.");
+            System.out.println(hashtag + " does not exist.");
             return false;
         }
         return true;

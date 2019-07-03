@@ -1,6 +1,6 @@
-import LikeStrategy.ExploreStrategy;
-import LikeStrategy.HashtagStrategy;
-import LikeStrategy.UserStrategy;
+import ActionStrategy.ExploreStrategy;
+import ActionStrategy.HashtagStrategy;
+import ActionStrategy.UserStrategy;
 import Singleton.BotSingleton;
 import Utility.UserDetails;
 import com.github.lalyos.jfiglet.FigletFont;

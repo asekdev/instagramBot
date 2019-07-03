@@ -71,13 +71,13 @@ class BotNavigationTest {
 //    @Test
 //    @Order(4)
 //    void goToUserPageTest() {
-//        boolean findUser = this.botNav.goToUserPage("kyliejenner");
+//        boolean findUser = this.botNav.go("kyliejenner");
 //        Utils.wait(3);
 //        assertEquals(true, findUser);
 //        assertEquals(this.driver.getCurrentUrl(), "https://www.instagram.com/kyliejenner/");
 //        Utils.wait(3);
 //    }
-//
+
 //    @Test
 //    @Order(5)
 //    void goToUserPageTestFailure() {

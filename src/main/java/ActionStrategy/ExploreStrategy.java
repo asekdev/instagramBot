@@ -1,33 +1,22 @@
-package LikeStrategy;
+package ActionStrategy;
 
 import BotActions.BotNavigation;
 import Interfaces.TypeStrategy;
+import Utility.GridCalculator;
+import Utility.Utils;
 import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 
-import Utility.*;
-
-
-public class HashtagStrategy implements TypeStrategy {
+public class ExploreStrategy implements TypeStrategy {
 
     private WebDriver driver;
     private ArrayList<String> imageLinks = new ArrayList<String>();
-    private BotNavigation botNav;
-    private String hashtag;
+    private BotNavigation botNavigation;
 
-    public HashtagStrategy(WebDriver driver, String hashtag) {
+    public ExploreStrategy(WebDriver driver) {
         this.driver = driver;
-        this.botNav = new BotNavigation(this.driver);
-        this.hashtag = hashtag;
-    }
-
-    public String getHashtag() {
-        return hashtag;
-    }
-
-    public void setHashtag(String hashtag) {
-        this.hashtag = hashtag;
+        this.botNavigation = new BotNavigation(this.driver);
     }
 
     public void addLink(String link) {
@@ -35,15 +24,16 @@ public class HashtagStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
+        this.botNavigation.goToExplorePage();
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
-        this.botNav.goToHashtag(this.getHashtag());
+        int lengthToScroll = numPhotos * 180;
+        String scrollLength =  String.valueOf(lengthToScroll);
+        System.out.println("scrolling by " + scrollLength + "pixels");
+        jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
 
-        int lengthToScroll = numPhotos * 150;
-        String scrollLength = String.valueOf(lengthToScroll);
-
-        for (int i = 1; i < numPhotos / 3; i++) {
+        for(int i=1; i < numPhotos / 2; i++) {
             Utils.wait(4);
-            jse.executeScript("window.scrollBy(0," + scrollLength + ")", "");
+            jse.executeScript("window.scrollBy(0,"+scrollLength+")", "");
         }
 
         int rows = GridCalculator.determineRows(numPhotos);
@@ -54,10 +44,14 @@ public class HashtagStrategy implements TypeStrategy {
                 cols = GridCalculator.determineCols(rows);
             }
 
+            if(i % 10 == 0){
+                jse.executeScript("window.scrollBy(0,1500)", "");
+            }
+
             for (int j = 1; j <= cols; j++) {
                 try {
-                    Utils.wait(3);
-                    WebElement photo = this.driver.findElement(By.xpath(" //*[@id=\"react-root\"]/section/main/article/div[2]/div/div[" + i + "]/div[" + j + "]/a"));
+//                    Utils.wait(3);
+                    WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/article/div[1]/div/div["+i+"]/div["+j+"]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
                     numPhotos -= 1;

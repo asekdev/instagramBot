@@ -1,17 +1,15 @@
 import BotActions.BotAuthentication;
 import BotActions.BotLiker;
 import BotActions.BotNavigation;
-import LikeStrategy.ExploreStrategy;
-import LikeStrategy.HashtagStrategy;
-import LikeStrategy.UserStrategy;
+import ActionStrategy.ExploreStrategy;
+import ActionStrategy.HashtagStrategy;
+import ActionStrategy.UserStrategy;
 import Utility.UserDetails;
 import Utility.Utils;
-import org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
