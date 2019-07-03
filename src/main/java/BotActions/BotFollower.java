@@ -27,8 +27,12 @@ public class BotFollower implements IFollower {
     }
 
     public boolean followerUser(String username) {
-        this.botNav.goToUserPageToFollow(username);
+        boolean userExists = this.botNav.goToUserPage(username, "follow");
         this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+
+        if(!userExists) {
+            return false;
+        }
 
         try {
             List<WebElement> userHeader = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/header/section/*/*"));
@@ -56,7 +60,11 @@ public class BotFollower implements IFollower {
     }
 
     public boolean unfollowUser(String username) {
-        this.botNav.goToUserPageToFollow(username);
+       boolean userExists = this.botNav.goToUserPage(username, "follow");
+
+       if(!userExists) {
+           return false;
+       }
 
         try {
             Utils.wait(3);

@@ -34,7 +34,7 @@ public class UserStrategy implements TypeStrategy {
     }
 
     public ArrayList getImageLinks(int numPhotos) {
-        boolean pageExsits = this.botNav.goToUserPageToLike(this.getUsername());
+        boolean pageExsits = this.botNav.goToUserPage(this.getUsername(), "like");
 
         System.out.println("page exists for image link = " + pageExsits);
         if(!pageExsits) {
