@@ -10,12 +10,10 @@ import com.github.lalyos.jfiglet.FigletFont;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Scanner;
-
 
 public class BotEngine {
 
@@ -73,6 +71,14 @@ public class BotEngine {
                     singleton.botAuth.logout();
                     System.out.println("\nLogin with a different account\n");
                     singleton.getDriver().quit();
+                    try {
+                        if (prefs.getChromedriverpath() == "") {
+                            setupChromeDriver(true);
+                        } else {
+                            setupChromeDriver(false);
+                        }
+                    } catch (Exception e) {
+                    }
                     userInputLogin();
                     break;
                 case 4:
@@ -151,6 +157,13 @@ public class BotEngine {
 
         while (!authorised) {
             UserDetails user = getUserCredentials();
+            if (singleton.getDriver() == null) {
+                try {
+                    setupChromeDriver(false);
+                } catch (Exception e) {
+                }
+            }
+
             singleton.setupBotCredentials(user);
             boolean login = singleton.botAuth.login();
 
@@ -159,6 +172,8 @@ public class BotEngine {
                 authorised = true;
             } else {
                 System.out.println("Authentication failed, try again.");
+                singleton.getDriver().quit();
+                singleton.setDriver(null);
             }
         }
     }
@@ -181,7 +196,7 @@ public class BotEngine {
         System.out.println("3) Follow a single user\n");
         System.out.println("4) Unfollow a single user");
         System.out.println("5) Unfollow multiple users\n");
-        System.out.println("6) Back to Engine.BotEngine Menu");
+        System.out.println("6) Back to Main Menu");
     }
 
     public static void showLikeOptions() {
