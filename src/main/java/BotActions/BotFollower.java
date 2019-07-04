@@ -41,22 +41,23 @@ public class BotFollower implements IFollower {
             WebElement followBtn = null;
 
             for (WebElement e : userHeader) {
-                if (e.getText().equalsIgnoreCase("Follow")) {
+                if (e.getText().equalsIgnoreCase("Follow") || e.getText().equalsIgnoreCase("Following")
+                || e.getText().equalsIgnoreCase("Requested")) {
                     followBtn = e;
                 }
             }
 
-//            System.out.println("button text follow -> " + followBtn.getText());
+//           System.out.println("button text follow -> " + followBtn.getText());
             if (followBtn.getText().equalsIgnoreCase("Follow")) {
                 followBtn.click();
             } else {
                 System.out.println("Already following " + username);
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-
         return true;
     }
 

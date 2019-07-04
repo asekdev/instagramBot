@@ -21,9 +21,9 @@ public class BotEngine {
 
         BotSingleton singleton = BotSingleton.getInstance();
         ChromePreferences prefs = ChromePreferences.getInstance();
-        System.out.println("existing path " + prefs.getChromedriverpath());
+//        System.out.println("existing path " + prefs.getChromedriverpath());
         try {
-            if (prefs.getChromedriverpath() == "") {
+            if (prefs.getChromedriverpath().equals("")) {
                 setupChromeDriver(true);
             } else {
                 setupChromeDriver(false);
@@ -72,7 +72,7 @@ public class BotEngine {
                     System.out.println("\nLogin with a different account\n");
                     singleton.getDriver().quit();
                     try {
-                        if (prefs.getChromedriverpath() == "") {
+                        if (prefs.getChromedriverpath().equals("")) {
                             setupChromeDriver(true);
                         } else {
                             setupChromeDriver(false);
@@ -104,13 +104,13 @@ public class BotEngine {
 
     }
 
-    public static void setupChromeDriver(boolean modify) throws Exception {
+    private static void setupChromeDriver(boolean modify) throws Exception {
         BotSingleton singleton = BotSingleton.getInstance();
         ChromePreferences prefs = ChromePreferences.getInstance();
 
         WebDriver driver = null;
 
-        if (prefs.getChromedriverpath() == "" || modify) {
+        if (prefs.getChromedriverpath().equals("")|| modify) {
             EventQueue.invokeAndWait(new Runnable() {
                 public void run() {
                     ChromePreferences prefs = ChromePreferences.getInstance();
@@ -140,7 +140,7 @@ public class BotEngine {
         singleton.setDriver(driver);
     }
 
-    public static UserDetails getUserCredentials() {
+    private static UserDetails getUserCredentials() {
         Scanner scan = new Scanner(System.in);
         System.out.print("Username: ");
         String username = scan.next();
@@ -151,7 +151,7 @@ public class BotEngine {
         return new UserDetails(username, password);
     }
 
-    public static void userInputLogin() {
+    private static void userInputLogin() {
         BotSingleton singleton = BotSingleton.getInstance();
         boolean authorised = false;
 
@@ -178,7 +178,7 @@ public class BotEngine {
         }
     }
 
-    public static void showMenuOptions() {
+    private static void showMenuOptions() {
         System.out.println("\nPlease select an option: ");
         System.out.println("--------------------------------------");
         System.out.println("1) Follow/Unfollow Users");
@@ -186,9 +186,11 @@ public class BotEngine {
         System.out.println("3) Login as a different user\n");
         System.out.println("4) Change ChromeDriver");
         System.out.println("5) Quit\n");
+
+        System.out.print("\nYour option: ");
     }
 
-    public static void showFollowOptions() {
+    private static void showFollowOptions() {
         System.out.println("Follow or Unfollow Users");
         System.out.println("--------------------------------------\n");
         System.out.println("1) Follow users by hashtag");
@@ -199,19 +201,19 @@ public class BotEngine {
         System.out.println("6) Back to Main Menu");
     }
 
-    public static void showLikeOptions() {
+    private static void showLikeOptions() {
         System.out.println("Like Photos");
         System.out.println("--------------------------------------\n");
         System.out.println("1) Like Photos by hashtag");
         System.out.println("2) Like Photos on explore page");
         System.out.println("3) Like a users photos\n");
-        System.out.println("4) Back to Engine.BotEngine Menu");
+        System.out.println("4) Back to Main Menu");
     }
 
-    public static void likeOptions(int option) {
+    private static void likeOptions(int option) {
         BotSingleton singleton = BotSingleton.getInstance();
         Scanner scan = new Scanner(System.in);
-        int numPhotos = 0;
+        int numPhotos;
 
         boolean validOption = false;
 
@@ -251,10 +253,10 @@ public class BotEngine {
 
     }
 
-    public static void followOptions(int option) {
+    private static void followOptions(int option) {
         BotSingleton singleton = BotSingleton.getInstance();
         Scanner scan = new Scanner(System.in);
-        int numUsers = 0;
+        int numUsers;
 
         boolean validOption = false;
 
