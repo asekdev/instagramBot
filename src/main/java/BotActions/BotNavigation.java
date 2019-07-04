@@ -19,7 +19,7 @@ public class BotNavigation implements INavigation {
         this.userDetails = userDetails;
     }
 
-    public BotNavigation(WebDriver driver){
+    public BotNavigation(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -31,7 +31,7 @@ public class BotNavigation implements INavigation {
     }
 
     public boolean goToProfile() {
-        this.driver.navigate().to("https://www.instagram.com/" + userDetails.getUsername()+"/");
+        this.driver.navigate().to("https://www.instagram.com/" + userDetails.getUsername() + "/");
         return this.driver.getCurrentUrl()
                 .equalsIgnoreCase("https://www.instagram.com/" + userDetails.getUsername() + "/");
     }
@@ -49,11 +49,11 @@ public class BotNavigation implements INavigation {
         try {
             WebElement notFoundConatiner = this.driver.findElement(By.xpath("/html/body/div/div[1]/div/div"));
         } catch (Exception e) {
-           if(actionType.equalsIgnoreCase("like")) {
-               boolean exists = isPublicAccount(username);
-               return exists;
-           }
-           return true;
+            if (actionType.equalsIgnoreCase("like")) {
+                boolean exists = isPublicAccount(username);
+                return exists;
+            }
+            return true;
         }
         System.out.println(username + "'s page doesnt exist!");
         return false;
@@ -62,9 +62,9 @@ public class BotNavigation implements INavigation {
     public boolean isPublicAccount(String username) {
         try {
             List<WebElement> privateAccountConatiner = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/div/article/div[1]/div/*"));
-            for(WebElement el : privateAccountConatiner) {
+            for (WebElement el : privateAccountConatiner) {
                 String notFound = "This Account is Private";
-                if(el.getText().equalsIgnoreCase(notFound)) {
+                if (el.getText().equalsIgnoreCase(notFound)) {
                     System.out.println(username + "'s account is private. Request a follow before attempting to like their photos");
                     return false;
                 }
@@ -78,7 +78,7 @@ public class BotNavigation implements INavigation {
     public boolean goToHashtag(String hashtag) {
         String formattedHashtag = "";
 
-        if(hashtag.contains("#")) {
+        if (hashtag.contains("#")) {
             formattedHashtag = hashtag.substring(1);
         } else {
             formattedHashtag = hashtag;
@@ -92,7 +92,7 @@ public class BotNavigation implements INavigation {
 
             Utils.wait(2);
 
-            WebElement found = this.driver.findElement(By.cssSelector("a[href='/explore/tags/"+ formattedHashtag + "/'"));
+            WebElement found = this.driver.findElement(By.cssSelector("a[href='/explore/tags/" + formattedHashtag + "/'"));
             found.click();
         } catch (Exception e) {
             //e.printStackTrace();

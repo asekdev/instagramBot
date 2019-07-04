@@ -14,11 +14,11 @@ public class BotLiker implements ILiker {
     private WebDriver driver;
     private ArrayList<String> imageLinks = new ArrayList<String>();
 
-    public BotLiker(WebDriver driver){
+    public BotLiker(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void addImageLinks(ArrayList a){
+    public void addImageLinks(ArrayList a) {
         this.imageLinks = a;
     }
 
@@ -27,11 +27,11 @@ public class BotLiker implements ILiker {
     }
 
     public boolean likePhotos(TypeStrategy strategy, int numPhotos) {
-       this.addImageLinks(strategy.getImageLinks(numPhotos));
+        this.addImageLinks(strategy.getImageLinks(numPhotos));
 
-       if(this.getImageLinkSize() == 0) {
-           return false;
-       }
+        if (this.getImageLinkSize() == 0) {
+            return false;
+        }
 
         for (String link : this.imageLinks) {
             try {

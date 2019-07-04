@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +31,7 @@ public class BotFollower implements IFollower {
         boolean userExists = this.botNav.goToUserPage(username, "follow");
         this.driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
-        if(!userExists) {
+        if (!userExists) {
             return false;
         }
 
@@ -60,11 +61,11 @@ public class BotFollower implements IFollower {
     }
 
     public boolean unfollowUser(String username) {
-       boolean userExists = this.botNav.goToUserPage(username, "follow");
+        boolean userExists = this.botNav.goToUserPage(username, "follow");
 
-       if(!userExists) {
-           return false;
-       }
+        if (!userExists) {
+            return false;
+        }
 
         try {
             Utils.wait(3);
@@ -79,7 +80,7 @@ public class BotFollower implements IFollower {
                     Utils.wait(3);
                     WebElement confirmUnfollow = this.driver.findElement(By.xpath("/html/body/div[3]/div/div/div[3]/button[1]"));
                     confirmUnfollow.click();
-                } else if(e.getText().equalsIgnoreCase("Follow")) {
+                } else if (e.getText().equalsIgnoreCase("Follow")) {
                     System.out.println("You're not following " + username + ". Cannot unfollow user that is not being followed.");
                 }
             }
@@ -125,7 +126,7 @@ public class BotFollower implements IFollower {
     public boolean followUsers(TypeStrategy type, int numUsers) {
         this.addUserLinks(type.getImageLinks(numUsers));
 
-        if(this.userLinks.size() == 0){
+        if (this.userLinks.size() == 0) {
             return false;
         }
 

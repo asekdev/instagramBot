@@ -37,7 +37,7 @@ public class UserStrategy implements TypeStrategy {
         boolean pageExsits = this.botNav.goToUserPage(this.getUsername(), "like");
 
 //        System.out.println("page exists for image link = " + pageExsits);
-        if(!pageExsits) {
+        if (!pageExsits) {
             return this.imageLinks;
         }
 

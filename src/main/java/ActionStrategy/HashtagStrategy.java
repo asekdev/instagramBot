@@ -38,7 +38,7 @@ public class HashtagStrategy implements TypeStrategy {
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         boolean searchHashtag = this.botNav.goToHashtag(this.getHashtag());
 
-        if(!searchHashtag) {
+        if (!searchHashtag) {
             return this.imageLinks;
         }
 
@@ -66,7 +66,8 @@ public class HashtagStrategy implements TypeStrategy {
                 } catch (NoSuchElementException e) {
                     //e.printStackTrace();
                     System.out.println("Cannot find image");
-                } catch (StaleElementReferenceException e) {}
+                } catch (StaleElementReferenceException e) {
+                }
             }
         }
         return this.imageLinks;

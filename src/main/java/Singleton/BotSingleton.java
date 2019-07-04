@@ -19,17 +19,21 @@ public class BotSingleton {
     private BotLiker botLiker;
     private UserDetails userDetails;
 
-    private BotSingleton(){}
+    private BotSingleton() {
+    }
 
     public static BotSingleton getInstance() {
         //if no singleton has been initialised, create a new one
-        if(instance == null) {
+        if (instance == null) {
             instance = new BotSingleton();
         }
         return instance;
     }
 
-    public WebDriver getDriver() { return this.driver; }
+    public WebDriver getDriver() {
+        return this.driver;
+    }
+
     public void setDriver(WebDriver driver) {
         this.driver = driver;
     }
@@ -46,7 +50,7 @@ public class BotSingleton {
         checkAuthorised();
         boolean likePhotos = this.botLiker.likePhotos(type, numPhotos);
 
-        if(likePhotos) {
+        if (likePhotos) {
             System.out.println("Liking completed successfully!");
         }
 
@@ -57,7 +61,7 @@ public class BotSingleton {
         checkAuthorised();
         boolean followUsers = this.botFollower.followUsers(type, numUsers);
 
-        if(followUsers) {
+        if (followUsers) {
             System.out.println("Followed users successfully!");
         } else {
             System.out.println("Something went wrong... Try again");
@@ -82,8 +86,8 @@ public class BotSingleton {
         checkAuthorised();
         this.botNav.goToProfile();
         boolean unfollowUsers = this.botFollower.unfollowUsers(numUsers);
-        if(unfollowUsers) {
-            System.out.println("Successfully unfollowed " + numUsers +" users");
+        if (unfollowUsers) {
+            System.out.println("Successfully unfollowed " + numUsers + " users");
         } else {
             System.out.println("Something happened while trying to unfollow users.");
         }
@@ -92,7 +96,7 @@ public class BotSingleton {
 
     private void checkAuthorised() {
         this.botNav.goHome();
-        if(!this.botAuth.isLoggedIn()) {
+        if (!this.botAuth.isLoggedIn()) {
             this.botAuth.login();
         }
     }
