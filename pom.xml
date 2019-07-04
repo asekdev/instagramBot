@@ -49,6 +49,14 @@
             <artifactId>jfiglet</artifactId>
             <version>0.0.8</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.googlecode.vfsjfilechooser2/vfsjfilechooser2 -->
+        <dependency>
+            <groupId>com.googlecode.vfsjfilechooser2</groupId>
+            <artifactId>vfsjfilechooser2</artifactId>
+            <version>0.2.5</version>
+        </dependency>
+
         <!-- ... -->
     </dependencies>
 </project>

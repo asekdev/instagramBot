@@ -42,7 +42,6 @@ class BotAuthenticationTest {
     @Test
     @Order(3)
     void loginFailed() {
-
         boolean loginAttempt = botAuth.login();
         assertEquals(false, loginAttempt);
     }

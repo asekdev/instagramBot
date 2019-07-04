@@ -1,23 +1,30 @@
+package Engine;
+
 import ActionStrategy.ExploreStrategy;
 import ActionStrategy.HashtagStrategy;
 import ActionStrategy.UserStrategy;
 import Singleton.BotSingleton;
+import Utility.ChromePreferences;
 import Utility.UserDetails;
 import com.github.lalyos.jfiglet.FigletFont;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import javax.swing.*;
+import javax.xml.ws.WebEndpoint;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.prefs.Preferences;
 
-public class Main {
+public class BotEngine {
 
     public static void main(String[] args){
 
         BotSingleton singleton = BotSingleton.getInstance();
-        //singleton.setDriver(setupChromeDriver());
+        setupChromeDriver(true);
         String headerText = "";
+
         boolean programRunning = true;
         Scanner scan = new Scanner(System.in);
 
@@ -59,27 +66,55 @@ public class Main {
                     userInputLogin();
                     break;
                 case 4:
+                    System.out.println("Please select your ChromeDriver");
+                    singleton.botAuth.logout();
+                    singleton.getDriver().quit();
+                    setupChromeDriver(true);
+                    break;
+                case 5:
                     System.out.println("Closing application...");
                     singleton.botAuth.logout();
                     singleton.getDriver().quit();
                     System.out.println("Application closed... Goodbye!");
                     System.exit(0);
-                    return;
+                    break;
             }
         }
 
     }
 
-    public static WebDriver setupChromeDriver() {
-        System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
-        System.setProperty("webdriver.chrome.args", "--disable-logging --log-level=3");
-        System.setProperty("webdriver.chrome.silentOutput", "true");
-        ChromeOptions options = new ChromeOptions();
+    public static void setupChromeDriver(boolean modify) {
+        BotSingleton singleton = BotSingleton.getInstance();
+        ChromePreferences prefs = new ChromePreferences();
+        JFileChooser fileChooser = null;
+        WebDriver driver = null;
+//        System.out.println("modify = " + modify);
+//        System.out.println("prefernce from before = " + prefs.getChromedriverpath());
+        if(prefs.getChromedriverpath() == "" || modify) {
+            System.out.println("Getting to open dialog area....");
+            System.out.println("filechooser > " + fileChooser);
+            fileChooser = new JFileChooser();
+            fileChooser.showOpenDialog(null);
+            fileChooser.setVisible(true);
+            prefs.setChromedriverPath(fileChooser.getSelectedFile().getAbsolutePath());
+        }
+
+       try {
+           System.setProperty("webdriver.chrome.driver", prefs.getChromedriverpath());
+           System.setProperty("webdriver.chrome.args", "--disable-logging --log-level=3");
+           System.setProperty("webdriver.chrome.silentOutput", "true");
+           ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--headless");
-        options.addArguments("--silent");
-        options.addArguments("--log-level=OFF");
-        WebDriver driver = new ChromeDriver(options); //re-add options as parameter
-        return driver;
+           options.addArguments("--silent");
+           options.addArguments("--log-level=OFF");
+           driver = new ChromeDriver(options); //re-add options as parameter
+       }catch (IllegalStateException e) {
+           System.out.println("Please choose a chromedriver exexutable file.");
+
+           setupChromeDriver(true);
+       }
+        System.out.println("did we get here");
+        singleton.setDriver(driver);
     }
 
     public static UserDetails getUserCredentials() {
@@ -95,10 +130,7 @@ public class Main {
 
     public static void userInputLogin() {
         BotSingleton singleton = BotSingleton.getInstance();
-        singleton.setDriver(setupChromeDriver());
         boolean authorised = false;
-//        UserDetails user = getUserCredentials();
-//        singleton.setupBotCredentials(user);
 
         while(!authorised) {
             UserDetails user = getUserCredentials();
@@ -118,9 +150,10 @@ public class Main {
         System.out.println("\nPlease select an option: ");
         System.out.println("--------------------------------------");
         System.out.println("1) Follow/Unfollow Users");
-        System.out.println("2) Like Photos\n");
-        System.out.println("3) Login as different user");
-        System.out.println("4) Quit\n");
+        System.out.println("2) Like Photos");
+        System.out.println("3) Login as a different user\n");
+        System.out.println("4) Change ChromeDriver");
+        System.out.println("5) Quit\n");
     }
 
     public static void showFollowOptions() {
@@ -131,7 +164,7 @@ public class Main {
         System.out.println("3) Follow a single user\n");
         System.out.println("4) Unfollow a single user");
         System.out.println("5) Unfollow multiple users\n");
-        System.out.println("6) Back to Main Menu");
+        System.out.println("6) Back to Engine.BotEngine Menu");
     }
 
     public static void showLikeOptions() {
@@ -140,7 +173,7 @@ public class Main {
         System.out.println("1) Like Photos by hashtag");
         System.out.println("2) Like Photos on explore page");
         System.out.println("3) Like a users photos\n");
-        System.out.println("4) Back to Main Menu");
+        System.out.println("4) Back to Engine.BotEngine Menu");
     }
 
     public static void likeOptions(int option) {
