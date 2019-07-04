@@ -56,7 +56,7 @@ public class BotAuthentication implements IAuth {
         } catch (Exception e) {
             return false;
         }
-        System.out.println("login success outcome: " + loginSuccess());
+//        System.out.println("login success outcome: " + loginSuccess());
 
         return loginSuccess();
     }

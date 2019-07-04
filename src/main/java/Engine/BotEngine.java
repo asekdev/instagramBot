@@ -12,25 +12,35 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import javax.swing.*;
-import javax.xml.ws.WebEndpoint;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Scanner;
-import java.util.prefs.Preferences;
+
 
 public class BotEngine {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         BotSingleton singleton = BotSingleton.getInstance();
-        setupChromeDriver(true);
+        ChromePreferences prefs = ChromePreferences.getInstance();
+        System.out.println("existing path " + prefs.getChromedriverpath());
+        try {
+            if (prefs.getChromedriverpath() == "") {
+                setupChromeDriver(true);
+            } else {
+                setupChromeDriver(false);
+            }
+        } catch (Exception e) {
+        }
+
         String headerText = "";
 
         boolean programRunning = true;
         Scanner scan = new Scanner(System.in);
 
         try {
-             headerText = FigletFont.convertOneLine("autogram");
-        } catch(IOException e) {
+            headerText = FigletFont.convertOneLine("autogram");
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -42,11 +52,11 @@ public class BotEngine {
         //Log the user in with provided credentials
         userInputLogin();
 
-        while(programRunning) {
+        while (programRunning) {
             showMenuOptions();
             int option = scan.nextInt();
 
-            switch(option) {
+            switch (option) {
                 case 1:
                     showFollowOptions();
                     System.out.print("Your option: ");
@@ -69,7 +79,12 @@ public class BotEngine {
                     System.out.println("Please select your ChromeDriver");
                     singleton.botAuth.logout();
                     singleton.getDriver().quit();
-                    setupChromeDriver(true);
+                    try {
+                        setupChromeDriver(true);
+                    } catch (Exception e) {
+
+                    }
+                    userInputLogin();
                     break;
                 case 5:
                     System.out.println("Closing application...");
@@ -83,37 +98,39 @@ public class BotEngine {
 
     }
 
-    public static void setupChromeDriver(boolean modify) {
+    public static void setupChromeDriver(boolean modify) throws Exception {
         BotSingleton singleton = BotSingleton.getInstance();
-        ChromePreferences prefs = new ChromePreferences();
-        JFileChooser fileChooser = null;
+        ChromePreferences prefs = ChromePreferences.getInstance();
+
         WebDriver driver = null;
-//        System.out.println("modify = " + modify);
-//        System.out.println("prefernce from before = " + prefs.getChromedriverpath());
-        if(prefs.getChromedriverpath() == "" || modify) {
-            System.out.println("Getting to open dialog area....");
-            System.out.println("filechooser > " + fileChooser);
-            fileChooser = new JFileChooser();
-            fileChooser.showOpenDialog(null);
-            fileChooser.setVisible(true);
-            prefs.setChromedriverPath(fileChooser.getSelectedFile().getAbsolutePath());
+
+        if (prefs.getChromedriverpath() == "" || modify) {
+            EventQueue.invokeAndWait(new Runnable() {
+                public void run() {
+                    ChromePreferences prefs = ChromePreferences.getInstance();
+                    JFrame jFrame = new JFrame();
+                    JFileChooser fileChooser = new JFileChooser();
+                    fileChooser.showOpenDialog(jFrame);
+                    fileChooser.setVisible(true);
+                    prefs.setChromedriverPath(fileChooser.getSelectedFile().getAbsolutePath());
+                    jFrame.dispose();
+                }
+            });
         }
 
-       try {
-           System.setProperty("webdriver.chrome.driver", prefs.getChromedriverpath());
-           System.setProperty("webdriver.chrome.args", "--disable-logging --log-level=3");
-           System.setProperty("webdriver.chrome.silentOutput", "true");
-           ChromeOptions options = new ChromeOptions();
+        try {
+            System.setProperty("webdriver.chrome.driver", prefs.getChromedriverpath());
+            System.setProperty("webdriver.chrome.args", "--disable-logging --log-level=3");
+            System.setProperty("webdriver.chrome.silentOutput", "true");
+            ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--headless");
-           options.addArguments("--silent");
-           options.addArguments("--log-level=OFF");
-           driver = new ChromeDriver(options); //re-add options as parameter
-       }catch (IllegalStateException e) {
-           System.out.println("Please choose a chromedriver exexutable file.");
-
-           setupChromeDriver(true);
-       }
-        System.out.println("did we get here");
+            options.addArguments("--silent");
+            options.addArguments("--log-level=OFF");
+            driver = new ChromeDriver(options); //re-add options as parameter
+        } catch (IllegalStateException e) {
+            System.out.println("Please choose a chromedriver executable file.");
+            setupChromeDriver(true);
+        }
         singleton.setDriver(driver);
     }
 
@@ -132,13 +149,13 @@ public class BotEngine {
         BotSingleton singleton = BotSingleton.getInstance();
         boolean authorised = false;
 
-        while(!authorised) {
+        while (!authorised) {
             UserDetails user = getUserCredentials();
             singleton.setupBotCredentials(user);
             boolean login = singleton.botAuth.login();
 
-            if(login) {
-                System.out.println("Logged in successfully!");
+            if (login) {
+                System.out.println("\nLogged in successfully!");
                 authorised = true;
             } else {
                 System.out.println("Authentication failed, try again.");
@@ -183,8 +200,8 @@ public class BotEngine {
 
         boolean validOption = false;
 
-        while(!validOption){
-            switch(option) {
+        while (!validOption) {
+            switch (option) {
                 case 1:
                     System.out.print("Specify a hashtag: ");
                     String hashtag = scan.next();
@@ -226,20 +243,20 @@ public class BotEngine {
 
         boolean validOption = false;
 
-        while(!validOption){
-            switch(option) {
+        while (!validOption) {
+            switch (option) {
                 case 1:
                     System.out.print("Specify a hashtag: ");
                     String hashtag = scan.next();
                     System.out.print("\nNumber of users to follow: ");
                     numUsers = scan.nextInt();
-                    singleton.followUsers(new HashtagStrategy(singleton.getDriver(), hashtag), numUsers );
+                    singleton.followUsers(new HashtagStrategy(singleton.getDriver(), hashtag), numUsers);
                     validOption = true;
                     break;
                 case 2:
                     System.out.print("\nNumber of users to follow on Explore page: ");
                     numUsers = scan.nextInt();
-                    singleton.followUsers(new ExploreStrategy(singleton.getDriver()), numUsers );
+                    singleton.followUsers(new ExploreStrategy(singleton.getDriver()), numUsers);
                     validOption = true;
                     break;
                 case 3:
