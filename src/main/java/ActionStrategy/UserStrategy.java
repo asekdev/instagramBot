@@ -39,7 +39,6 @@ public class UserStrategy implements TypeStrategy {
         try {
             divsOnPage = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/*"));
         } catch (NoSuchElementException e) {
-            System.out.println("something happened trying to find the divs");
             e.printStackTrace();
         }
         return divsOnPage.size() - 1;
@@ -52,11 +51,8 @@ public class UserStrategy implements TypeStrategy {
             return this.imageLinks;
         }
 
-        System.out.println("div count is " + checkDivCount());
-
         JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         Utils.scrollWindowDown(this.driver, numPhotos);
-
         int rows = GridCalculator.determineRows(numPhotos);
         int cols = 3;
 

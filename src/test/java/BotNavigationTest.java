@@ -1,5 +1,6 @@
 import BotActions.BotAuthentication;
 import BotActions.BotNavigation;
+import Utility.Constants;
 import Utility.UserDetails;
 import Utility.Utils;
 import org.junit.jupiter.api.BeforeAll;
@@ -9,7 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class BotNavigationTest {
@@ -17,11 +18,12 @@ class BotNavigationTest {
     static WebDriver driver;
     static BotNavigation botNav;
     static BotAuthentication botAuthentication;
-    static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
+    static UserDetails userDetails = new UserDetails(Constants.USERNAME, Constants.PASSWORD);
 
     @BeforeAll
     public static void executeBefore() {
         System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
 //        String chromeProfile = "/Users/723352/Library/Application Support/Google/Chrome";
 //        ChromeOptions options = new ChromeOptions();
 //        options.addArguments("--user-data-dir="+chromeProfile);
@@ -36,8 +38,7 @@ class BotNavigationTest {
     @Test
     @Order(1)
     void goHomeTest() {
-        if (botAuthentication.isLoggedIn()) {
-            System.out.println("we need to log in ");
+        if (!botAuthentication.isLoggedIn()) {
             botAuthentication.login();
         }
 
@@ -51,68 +52,66 @@ class BotNavigationTest {
     @Test
     @Order(2)
     void goToProfileTest() {
-        boolean goProfile = this.botNav.goToProfile();
-        assertEquals(true, goProfile);
-        assertEquals(true, this.driver.getCurrentUrl()
-                .equalsIgnoreCase("https://www.instagram.com/" + this.botNav.userDetails.getUsername() + "/"));
+        boolean goProfile = botNav.goToProfile();
+        assertTrue(goProfile);
+        assertEquals("https://www.instagram.com/grandkosmetics/", driver.getCurrentUrl());
         Utils.wait(3);
     }
 
     @Test
     @Order(3)
     void goToExplorePageTest() {
-        boolean goExplore = this.botNav.goToExplorePage();
-        Utility.Utils.wait(2);
-        assertEquals(true, goExplore);
-        assertEquals(true, this.driver.getCurrentUrl()
-                .equalsIgnoreCase("https://www.instagram.com/explore/"));
-        Utility.Utils.wait(3);
+        boolean goToExplore = botNav.goToExplorePage();
+        Utils.wait(2);
+        assertTrue(goToExplore);
+        assertEquals("https://www.instagram.com/explore/", driver.getCurrentUrl());
+        Utils.wait(3);
     }
 
     @Test
     @Order(4)
     void goToUserPageTest() {
-        boolean findUser = this.botNav.goToUserPage("kyliejenner", "like");
+        boolean goToUserPage = botNav.goToUserPage("kyliejenner", "like");
         Utils.wait(3);
-        assertEquals(true, findUser);
-        assertEquals(this.driver.getCurrentUrl(), "https://www.instagram.com/kyliejenner/");
+        assertTrue(goToUserPage);
+        assertEquals("https://www.instagram.com/kyliejenner/", driver.getCurrentUrl());
         Utils.wait(3);
     }
 
     @Test
     @Order(5)
     void goToUserPageThatDoesntExistTest() {
-        boolean findUser = this.botNav.goToUserPage("kylieasdfasdfasdfjenner", "like");
+        boolean goToUserPageThatDoesntExist = botNav.goToUserPage("kylieasdfasdfasdfjenner", "like");
         Utils.wait(3);
-        assertEquals(false, findUser);
+        assertFalse(goToUserPageThatDoesntExist);
         Utils.wait(3);
     }
 
     @Test
     @Order(6)
     void goToHashtagTest() {
-        this.botNav.goHome();
-        boolean hashTag = this.botNav.goToHashtag("#test");
+        botNav.goHome();
+        boolean hashTagFormatted = botNav.goToHashtag("#test");
         Utils.wait(3);
-        assertEquals(true, hashTag);
+        assertTrue(hashTagFormatted);
         Utils.wait(3);
     }
 
     @Test
     @Order(7)
     void goToHashtagNotFormattedTest() {
-        boolean hashTag = this.botNav.goToHashtag("test");
+        boolean hashTagNotFormatted = botNav.goToHashtag("test");
         Utils.wait(3);
-        assertEquals(true, hashTag);
+        assertTrue(hashTagNotFormatted);
         Utils.wait(3);
     }
 
     @Test
     @Order(8)
     void goToHashtagDoesntExistTest() {
-        boolean hashTag = this.botNav.goToHashtag("testasdfasdfasdfa");
+        boolean hashtagThatDoesntExist = botNav.goToHashtag("testasdfasdfasdfa");
         Utils.wait(3);
-        assertEquals(false, hashTag);
+        assertFalse(hashtagThatDoesntExist);
         Utils.wait(3);
         this.driver.quit();
     }
