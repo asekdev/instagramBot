@@ -7,6 +7,7 @@ import Utility.Utils;
 import org.openqa.selenium.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserStrategy implements TypeStrategy {
 
@@ -33,6 +34,19 @@ public class UserStrategy implements TypeStrategy {
         this.imageLinks.add(link);
     }
 
+    private int checkDivCount() {
+        List<WebElement> divsOnPage = new ArrayList<>();
+        try {
+
+            divsOnPage = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/*"));
+
+        } catch (NoSuchElementException e) {
+            System.out.println("something happened trying to find the divs");
+        }
+
+        return divsOnPage.size() -1;
+    }
+
     public ArrayList getImageLinks(int numPhotos) {
         boolean pageExsits = this.botNav.goToUserPage(this.getUsername(), "like");
 
@@ -40,8 +54,9 @@ public class UserStrategy implements TypeStrategy {
             return this.imageLinks;
         }
 
-        JavascriptExecutor jse = (JavascriptExecutor) this.driver;
+        System.out.println("div count is " + checkDivCount());
 
+        JavascriptExecutor jse = (JavascriptExecutor) this.driver;
         Utils.scrollWindowDown(this.driver, numPhotos);
 
         int rows = GridCalculator.determineRows(numPhotos);
@@ -55,7 +70,7 @@ public class UserStrategy implements TypeStrategy {
             for (int j = 1; j <= cols; j++) {
                 try {
                     Utils.wait(3);
-                    WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div[2]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
+                    WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div["+checkDivCount()+"]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
 //                    System.out.println("image link = " + imageLink);

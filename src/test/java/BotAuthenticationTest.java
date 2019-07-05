@@ -1,6 +1,5 @@
 import BotActions.BotAuthentication;
-import Utility.UserDetails;
-import Utility.Utils;
+import Utility.*;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,55 +11,73 @@ class BotAuthenticationTest {
 
     static WebDriver driver;
     static BotAuthentication botAuth;
-    static UserDetails userDetails = new UserDetails("ahhhahhh", "2333forrty!");
 
-    @BeforeAll
-    public static void executeBefore() {
-        System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+    @BeforeEach
+    public void executeBefore() {
+        //System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
+        System.setProperty("webdriver.chrome.driver", "/usr/bin/chromedriver");
         driver = new ChromeDriver();
-        botAuth = new BotAuthentication(driver, userDetails);
     }
 
     @Test
     @Order(1)
-    void notLoggedIn() {
-        this.driver.navigate().to("https://www.instagram.com/explore/");
-        Utility.Utils.wait(5);
-        boolean isLoggedIn = botAuth.isLoggedIn();
-        assertEquals(false, isLoggedIn);
-        this.driver.quit();
+    void loginSuccessTest() {
+        //provide correct credentials
+        UserDetails userDetails = new UserDetails(Constants.USERNAME, Constants.PASSWORD);
+        botAuth = new BotAuthentication(driver, userDetails);
+        Utils.wait(4);
+        boolean loginAttempt = botAuth.login();
+        assertTrue(loginAttempt);
+        driver.quit();
     }
 
     @Test
     @Order(2)
-    void loginSuccess() {
-        Utils.wait(4);
+    void loginFailedTest() {
+        //provide invalid credentials
+        UserDetails userDetails = new UserDetails("ahhhahhh", "2333forrty!");
+        botAuth = new BotAuthentication(driver, userDetails);
         boolean loginAttempt = botAuth.login();
-        assertEquals(true, loginAttempt);
+        assertFalse(loginAttempt);
+        driver.quit();
     }
 
     @Test
     @Order(3)
-    void loginFailed() {
-        boolean loginAttempt = botAuth.login();
-        assertEquals(false, loginAttempt);
+    void isLoggedInTest() {
+        //login successfully, then check if logged in
+        UserDetails userDetails = new UserDetails(Constants.USERNAME, Constants.PASSWORD);
+        botAuth = new BotAuthentication(driver, userDetails);
+        Utils.wait(4);
+        botAuth.login();
+        Utils.wait(4);
+        boolean loggedIn = botAuth.isLoggedIn();
+        assertTrue(loggedIn);
+        driver.quit();
     }
 
     @Test
     @Order(4)
-    void isLoggedIn() {
-        boolean loggedIn = botAuth.isLoggedIn();
-        assertEquals(true, loggedIn);
+    void notLoggedInTest() {
+        //create the user details & bot auth
+        UserDetails userDetails = new UserDetails("ahhhahhh", "2333forrty!");
+        botAuth = new BotAuthentication(driver, userDetails);
+        Utils.wait(4);
+        boolean isLoggedIn = botAuth.isLoggedIn();
+        assertFalse(isLoggedIn);
+        driver.quit();
     }
 
     @Test
     @Order(5)
-    void logout() {
+    void logoutTest() {
+        UserDetails userDetails = new UserDetails(Constants.USERNAME, Constants.PASSWORD);
+        botAuth = new BotAuthentication(driver, userDetails);
+        Utils.wait(4);
+        botAuth.login();
         boolean logout = botAuth.logout();
-        assertEquals(true, logout);
-
-        Utils.wait(5);
-        this.driver.quit();
+        assertTrue(logout);
+        driver.quit();
     }
 
 }

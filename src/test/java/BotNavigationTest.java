@@ -18,6 +18,7 @@ class BotNavigationTest {
     static BotNavigation botNav;
     static BotAuthentication botAuthentication;
     static UserDetails userDetails = new UserDetails("grandkosmetics", "ruska2019!");
+
     @BeforeAll
     public static void executeBefore() {
         System.setProperty("webdriver.chrome.driver", "/Users/723352/Downloads/chromedriver");
@@ -53,7 +54,7 @@ class BotNavigationTest {
         boolean goProfile = this.botNav.goToProfile();
         assertEquals(true, goProfile);
         assertEquals(true, this.driver.getCurrentUrl()
-                .equalsIgnoreCase("https://www.instagram.com/" + this.botNav.userDetails.getUsername()+"/"));
+                .equalsIgnoreCase("https://www.instagram.com/" + this.botNav.userDetails.getUsername() + "/"));
         Utils.wait(3);
     }
 
@@ -80,8 +81,8 @@ class BotNavigationTest {
 
     @Test
     @Order(5)
-    void goToUserPageTestFailure() {
-        boolean findUser = this.botNav.goToUserPage("kylieasdfasdfasdfjenner","like");
+    void goToUserPageThatDoesntExistTest() {
+        boolean findUser = this.botNav.goToUserPage("kylieasdfasdfasdfjenner", "like");
         Utils.wait(3);
         assertEquals(false, findUser);
         Utils.wait(3);
@@ -104,12 +105,11 @@ class BotNavigationTest {
         Utils.wait(3);
         assertEquals(true, hashTag);
         Utils.wait(3);
-
     }
 
     @Test
     @Order(8)
-    void goToHashtagFailure() {
+    void goToHashtagDoesntExistTest() {
         boolean hashTag = this.botNav.goToHashtag("testasdfasdfasdfa");
         Utils.wait(3);
         assertEquals(false, hashTag);
