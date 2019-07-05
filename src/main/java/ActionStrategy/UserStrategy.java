@@ -37,14 +37,12 @@ public class UserStrategy implements TypeStrategy {
     private int checkDivCount() {
         List<WebElement> divsOnPage = new ArrayList<>();
         try {
-
             divsOnPage = this.driver.findElements(By.xpath("//*[@id=\"react-root\"]/section/main/div/*"));
-
         } catch (NoSuchElementException e) {
             System.out.println("something happened trying to find the divs");
+            e.printStackTrace();
         }
-
-        return divsOnPage.size() -1;
+        return divsOnPage.size() - 1;
     }
 
     public ArrayList getImageLinks(int numPhotos) {
@@ -70,10 +68,9 @@ public class UserStrategy implements TypeStrategy {
             for (int j = 1; j <= cols; j++) {
                 try {
                     Utils.wait(3);
-                    WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div["+checkDivCount()+"]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
+                    WebElement photo = this.driver.findElement(By.xpath("//*[@id=\"react-root\"]/section/main/div/div[" + checkDivCount() + "]/article/div[1]/div/div[" + i + "]/div[" + j + "]/a"));
                     String imageLink = photo.getAttribute("href");
                     this.addLink(imageLink);
-//                    System.out.println("image link = " + imageLink);
                     numPhotos -= 1;
                     photo = null;
                     if (numPhotos == 0) {
@@ -87,7 +84,6 @@ public class UserStrategy implements TypeStrategy {
                 }
             }
         }
-//        System.out.println("image link size = " + this.imageLinks.size());
         return this.imageLinks;
     }
 }
