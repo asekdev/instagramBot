@@ -1,5 +1,7 @@
 # :space_invader: AutoGram 
 
+<img src="https://img.shields.io/badge/tests-passing-brightgreen.svg" />
+
 AutogGram is an Instagram automation tool.
 
 ## Dependencies
